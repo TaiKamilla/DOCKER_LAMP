@@ -1,0 +1,51 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <!-- deprecated -->
+        <service alias="Shopware\Core\System\StateMachine\StateMachineRegistry" id="Shopware\Core\Framework\StateMachine\StateMachineRegistry" />
+
+        <service id="Shopware\Core\System\StateMachine\Api\StateMachineActionController" public="true">
+            <argument type="service" id="Shopware\Core\System\StateMachine\StateMachineRegistry"/>
+            <argument type="service" id="Shopware\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry"/>
+            <call method="setContainer">
+                <argument type="service" id="service_container"/>
+            </call>
+        </service>
+
+        <service id="Shopware\Core\System\StateMachine\StateMachineRegistry">
+            <argument type="service" id="state_machine.repository" />
+            <argument type="service" id="state_machine_state.repository" />
+            <argument type="service" id="state_machine_history.repository" />
+            <argument type="service" id="event_dispatcher"/>
+            <argument type="service" id="Shopware\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry"/>
+        </service>
+
+        <service id="Shopware\Core\System\StateMachine\Command\WorkflowDumpCommand">
+            <argument type="service" id="Shopware\Core\System\StateMachine\StateMachineRegistry"/>
+
+            <tag name="console.command"/>
+        </service>
+        <service id="Shopware\Core\System\StateMachine\StateMachineDefinition">
+            <tag name="shopware.entity.definition" entity="state_machine"/>
+        </service>
+        <service id="Shopware\Core\System\StateMachine\StateMachineTranslationDefinition">
+            <tag name="shopware.entity.definition" entity="state_machine_translation"/>
+        </service>
+        <service id="Shopware\Core\System\StateMachine\Aggregation\StateMachineState\StateMachineStateDefinition">
+            <tag name="shopware.entity.definition" entity="state_machine_state"/>
+        </service>
+        <service id="Shopware\Core\System\StateMachine\Aggregation\StateMachineState\StateMachineStateTranslationDefinition">
+            <tag name="shopware.entity.definition" entity="state_machine_state_translation"/>
+        </service>
+        <service  id="Shopware\Core\System\StateMachine\Aggregation\StateMachineTransition\StateMachineTransitionDefinition">
+            <tag name="shopware.entity.definition" entity="state_machine_transition"/>
+        </service>
+        <service  id="Shopware\Core\System\StateMachine\Aggregation\StateMachineHistory\StateMachineHistoryDefinition">
+            <tag name="shopware.entity.definition" entity="state_machine_history"/>
+        </service>
+    </services>
+</container>

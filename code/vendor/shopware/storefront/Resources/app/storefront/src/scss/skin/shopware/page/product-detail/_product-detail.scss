@@ -1,0 +1,22 @@
+.product-detail-name {
+    color: $sw-headline-color;
+}
+
+.product-detail-manufacturer-logo {
+    max-width: 200px;
+    max-height: 70px;
+}
+
+.product-detail-price {
+    color: $price-color;
+    margin-bottom: 0;
+    font-weight: $font-weight-bold;
+}
+
+.product-detail-ordernumber-label {
+    font-weight: $font-weight-bold;
+}
+
+.product-detail-quantity-select {
+    height: 100%;
+}

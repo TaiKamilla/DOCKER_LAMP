@@ -1,0 +1,171 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <!-- Theme -->
+        <service id="Shopware\Storefront\Theme\StorefrontPluginRegistry" public="true">
+            <argument type="service" id="kernel"/>
+        </service>
+
+        <service id="Shopware\Storefront\Theme\ThemeCompiler">
+            <argument type="service" id="shopware.filesystem.public"/>
+            <argument type="service" id="Shopware\Storefront\Theme\ThemeFileResolver" />
+            <argument>%kernel.cache_dir%</argument>
+            <argument>%kernel.debug%</argument>
+        </service>
+
+        <service id="Shopware\Storefront\Theme\ThemeLifecycleService">
+            <argument type="service" id="Shopware\Storefront\Theme\StorefrontPluginRegistry"/>
+            <argument type="service" id="theme.repository"/>
+            <argument type="service" id="media.repository"/>
+            <argument type="service" id="media_folder.repository"/>
+            <argument type="service" id="theme_media.repository"/>
+            <argument type="service" id="Shopware\Core\Content\Media\File\FileSaver"/>
+        </service>
+
+        <service id="Shopware\Storefront\Theme\ThemeFileResolver"/>
+
+        <service id="Shopware\Storefront\Theme\ThemeService">
+            <argument type="service" id="Shopware\Storefront\Theme\StorefrontPluginRegistry"/>
+            <argument type="service" id="theme.repository"/>
+            <argument type="service" id="theme_sales_channel.repository"/>
+            <argument type="service" id="media.repository"/>
+            <argument type="service" id="Shopware\Storefront\Theme\StorefrontPluginRegistry"/>
+            <argument type="service" id="Shopware\Storefront\Theme\ThemeCompiler"/>
+            <argument type="service" id="cache.object"/>
+        </service>
+
+        <!-- Entity definitions -->
+        <service id="Shopware\Storefront\Theme\ThemeDefinition">
+            <tag name="shopware.entity.definition" entity="theme"/>
+        </service>
+
+        <service id="Shopware\Storefront\Theme\Aggregate\ThemeTranslationDefinition">
+            <tag name="shopware.entity.definition" entity="theme_translation"/>
+        </service>
+
+        <service id="Shopware\Storefront\Theme\Aggregate\ThemeSalesChannelDefinition">
+            <tag name="shopware.entity.definition" entity="theme_sales_channel"/>
+        </service>
+
+        <service id="Shopware\Storefront\Theme\Aggregate\ThemeMediaDefinition">
+            <tag name="shopware.entity.definition" entity="theme_media"/>
+        </service>
+
+        <!-- Entity extensions -->
+        <service id="Shopware\Storefront\Theme\Extension\SalesChannelExtension">
+            <tag name="shopware.entity.extension"/>
+        </service>
+
+        <service id="Shopware\Storefront\Theme\Extension\LanguageExtension">
+            <tag name="shopware.entity.extension"/>
+        </service>
+
+        <service id="Shopware\Storefront\Theme\Extension\MediaExtension">
+            <tag name="shopware.entity.extension"/>
+        </service>
+
+        <!-- Controller -->
+        <service id="Shopware\Storefront\Theme\Controller\ThemeController" public="true">
+            <argument type="service" id="Shopware\Storefront\Theme\ThemeService"/>
+            <call method="setContainer">
+                <argument type="service" id="service_container"/>
+            </call>
+        </service>
+
+        <!--  Commands -->
+        <service id="Shopware\Storefront\Theme\Command\ThemeCreateCommand">
+            <argument>%kernel.project_dir%</argument>
+
+            <tag name="console.command"/>
+        </service>
+
+        <service id="Shopware\Storefront\Theme\Command\ThemeChangeCommand">
+            <argument type="service" id="Shopware\Storefront\Theme\ThemeService"/>
+            <argument type="service" id="Shopware\Storefront\Theme\StorefrontPluginRegistry"/>
+            <argument type="service" id="sales_channel.repository"/>
+            <argument type="service" id="theme.repository"/>
+            <argument type="service" id="theme_sales_channel.repository"/>
+            <argument type="service" id="Shopware\Core\Content\Media\DataAbstractionLayer\MediaThumbnailRepositoryDecorator"/>
+
+            <tag name="console.command"/>
+        </service>
+
+        <service id="Shopware\Storefront\Theme\Command\ThemeCompileCommand">
+            <argument type="service" id="Shopware\Storefront\Theme\ThemeService"/>
+            <argument type="service" id="sales_channel.repository"/>
+
+            <tag name="console.command"/>
+        </service>
+
+        <service id="Shopware\Storefront\Theme\Command\ThemeDumpCommand">
+            <argument type="service" id="Shopware\Storefront\Theme\StorefrontPluginRegistry"/>
+            <argument type="service" id="Shopware\Storefront\Theme\ThemeFileResolver"/>
+            <argument type="service" id="theme.repository"/>
+            <argument>%kernel.cache_dir%</argument>
+
+            <tag name="console.command"/>
+        </service>
+
+        <service id="Shopware\Storefront\Theme\Command\ThemeRefreshCommand">
+            <argument type="service" id="Shopware\Storefront\Theme\ThemeLifecycleService"/>
+
+            <tag name="console.command"/>
+        </service>
+
+        <!-- Subscriber -->
+        <service id="Shopware\Storefront\Theme\Subscriber\PluginLifecycleSubscriber">
+            <argument type="service" id="Shopware\Storefront\Theme\ThemeLifecycleService"/>
+            <argument type="service" id="Shopware\Storefront\Theme\StorefrontPluginRegistry"/>
+            <argument type="service" id="Shopware\Storefront\Theme\ThemeService"/>
+            <argument>%kernel.project_dir%</argument>
+            <argument type="service" id="theme.repository"/>
+            <argument type="service" id="sales_channel.repository"/>
+
+            <tag name="kernel.event_subscriber"/>
+        </service>
+
+        <service id="Shopware\Storefront\Theme\Twig\ThemeInheritanceBuilderInterface"
+                 class="Shopware\Storefront\Theme\Twig\ThemeInheritanceBuilder">
+            <argument type="service" id="kernel"/>
+        </service>
+
+        <!-- Twig -->
+        <service id="Shopware\Storefront\Theme\Twig\ThemeTemplateFinder" public="true"
+                 decorates="Shopware\Core\Framework\Adapter\Twig\TemplateFinder">
+
+            <argument type="service" id="twig"/>
+            <argument type="service" id="twig.loader"/>
+            <argument>%kernel.cache_dir%</argument>
+            <argument type="service" id="Shopware\Storefront\Theme\Twig\ThemeInheritanceBuilderInterface"/>
+
+            <call method="registerBundles">
+                <argument type="service" id="kernel" />
+            </call>
+
+            <tag name="kernel.event_subscriber" />
+        </service>
+
+        <service id="Shopware\Storefront\Theme\Subscriber\FirstRunWizardSubscriber">
+            <argument type="service" id="Shopware\Storefront\Theme\ThemeService"/>
+            <argument type="service" id="Shopware\Storefront\Theme\ThemeLifecycleService"/>
+            <argument type="service" id="theme.repository" />
+            <argument type="service" id="theme_sales_channel.repository" />
+            <argument type="service" id="sales_channel.repository" />
+
+            <tag name="kernel.event_subscriber"/>
+        </service>
+
+        <service id="Shopware\Storefront\Theme\Subscriber\UpdateSubscriber">
+            <argument type="service" id="Shopware\Storefront\Theme\ThemeService"/>
+            <argument type="service" id="Shopware\Storefront\Theme\ThemeLifecycleService"/>
+            <argument type="service" id="theme.repository" />
+
+            <tag name="kernel.event_subscriber"/>
+        </service>
+
+    </services>
+</container>

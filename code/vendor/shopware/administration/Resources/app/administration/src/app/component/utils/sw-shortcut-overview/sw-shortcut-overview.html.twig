@@ -1,0 +1,28 @@
+{% block sw_shortcut_overview %}
+    <div class="sw-shortcut-overview">
+        {% block sw_shortcut_overview_modal %}
+            <sw-modal v-if="showShortcutOverviewModal"
+                      class="sw-shortcut-overview--modal"
+                      @modal-close="onCloseShortcutOverviewModal"
+                      :title="$tc(`sw-shortcut-overview.modalTitle`)"
+                      variant="large">
+
+                    {% block sw_shortcut_overview_modal_section_adding_items %}
+                        <h3>{{ $tc(`sw-shortcut-overview.sectionAddingItems`) }}</h3>
+                        <sw-shortcut-overview-item v-for="section in sections.addingItems" :title="section.title" :content="section.content" :key="section.id"></sw-shortcut-overview-item>
+                    {% endblock %}
+
+                    {% block sw_shortcut_overview_modal_section_navigation %}
+                        <h3>{{ $tc(`sw-shortcut-overview.sectionNavigation`) }}</h3>
+                        <sw-shortcut-overview-item v-for="section in sections.navigation" :title="section.title" :content="section.content" :key="section.id"></sw-shortcut-overview-item>
+                    {% endblock %}
+
+                    {% block sw_shortcut_overview_modal_section_special_shortcuts %}
+                        <h3>{{ $tc(`sw-shortcut-overview.sectionSpecialShortcuts`) }}</h3>
+                        <sw-shortcut-overview-item v-for="section in sections.specialShortcuts" :title="section.title" :content="section.content" :key="section.id"></sw-shortcut-overview-item>
+                    {% endblock %}
+
+            </sw-modal>
+        {% endblock %}
+    </div>
+{% endblock %}

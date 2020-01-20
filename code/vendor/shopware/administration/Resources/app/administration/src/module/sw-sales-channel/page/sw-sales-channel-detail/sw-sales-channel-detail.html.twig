@@ -1,0 +1,91 @@
+{% block sw_sales_channel_detail %}
+    <sw-page class="sw-sales-channel-detail">
+        {% block sw_sales_channel_detail_header %}
+            <template slot="smart-bar-header">
+                {% block sw_sales_channel_detail_header_headline %}
+                    <h2>{{ placeholder(salesChannel, 'name', $tc('sw-sales-channel.detail.textHeadline')) }}</h2>
+                {% endblock %}
+            </template>
+        {% endblock %}
+
+        {% block sw_sales_channel_detail_actions %}
+            <template slot="smart-bar-actions">
+                {% block sw_sales_channel_detail_actions_save %}
+                    <sw-button-process
+                        class="sw-sales-channel-detail__save-action"
+                        :isLoading="isLoading"
+                        :processSuccess="isSaveSuccessful"
+                        :disabled="isLoading || productComparison.invalidFileName"
+                        variant="primary"
+                        @process-finish="saveFinish"
+                        v-tooltip.bottom="tooltipSave"
+                        @click.prevent="onSave">
+                        {{ $tc('sw-sales-channel.detail.buttonSave') }}
+                    </sw-button-process>
+                {% endblock %}
+            </template>
+        {% endblock %}
+
+        {% block sw_sales_channel_detail_language_switch %}
+            <sw-language-switch slot="language-switch"
+                                @on-change="onChangeLanguage"
+                                :saveChangesFunction="saveOnLanguageChange"
+                                :abortChangeFunction="abortOnLanguageChange">
+            </sw-language-switch>
+        {% endblock %}
+
+        {% block sw_sales_channel_detail_content %}
+            <sw-card-view slot="content">
+
+                {% block sw_sales_channel_detail_content_language_info %}
+                    <sw-language-info
+                            :entityDescription="placeholder(salesChannel, 'name', $tc('sw-sales-channel.detail.textHeadline'))">
+                    </sw-language-info>
+                {% endblock %}
+
+                {% block sw_sales_channel_detail_content_tabs %}
+                    <sw-tabs class="sw-sales-channel-detail-__tabs">
+                        {%  block sw_sales_channel_detail_content_tab_general %}
+                            <sw-tabs-item :route="{ name: 'sw.sales.channel.detail.base', params: { id: $route.params.id } }"
+                                          :title="$tc('sw-sales-channel.detail.tabBase')">
+                                {{ $tc('sw-sales-channel.detail.tabBase') }}
+                            </sw-tabs-item>
+                        {% endblock %}
+
+                        {%  block sw_sales_channel_detail_content_tab_theme %}{% endblock %}
+
+                        {%  block sw_sales_channel_detail_content_tab_product_comparison %}
+                            <sw-tabs-item v-if="isProductComparison && !isLoading"
+                                          :route="{ name: 'sw.sales.channel.detail.productComparison', params: { id: $route.params.id } }"
+                                          :title="$tc('sw-sales-channel.detail.tabProductComparison')"
+                                          >
+                                {{ $tc('sw-sales-channel.detail.tabProductComparison') }}
+                            </sw-tabs-item>
+                        {% endblock %}
+                    </sw-tabs>
+                {% endblock %}
+
+                {% block sw_sales_channel_detail_content_view %}
+                    <router-view :salesChannel="salesChannel"
+                                 :productExport="productExport"
+                                 :storefrontSalesChannelCriteria="storefrontSalesChannelCriteria"
+                                 :customFieldSets="customFieldSets"
+                                 :isLoading="isLoading"
+                                 :productComparisonAccessUrl="productComparison.productComparisonAccessUrl"
+                                 :key="$route.params.id"
+                                 :templateOptions="productComparison.templateOptions"
+                                 :showTemplateModal="productComparison.showTemplateModal"
+                                 :templateName="productComparison.templateName"
+                                 @template-selected="onTemplateSelected"
+                                 @access-key-changed="generateAccessUrl"
+                                 @domain-changed="generateAccessUrl"
+                                 @invalid-file-name="setInvalidFileName(true)"
+                                 @valid-file-name="setInvalidFileName(false)"
+                                 @template-modal-close="onTemplateModalClose"
+                                 @template-modal-confirm="onTemplateModalConfirm">
+                    </router-view>
+                {% endblock %}
+            </sw-card-view>
+        {% endblock %}
+    </sw-page>
+{% endblock %}

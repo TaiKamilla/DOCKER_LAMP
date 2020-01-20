@@ -1,0 +1,81 @@
+@import "~scss/variables";
+
+.sw-dashboard-index {
+    .sw-dashboard-index__intro {
+        display: flex;
+        padding: 30px;
+
+        .sw-dashboard-index__intro-content {
+            min-width: 400px;
+
+            h1 {
+                font-size: ($font-size-default * 2);
+                margin-bottom: 20px;
+            }
+
+            .sw-dashboard-index__intro-buttons {
+                margin-top: 40px;
+            }
+        }
+
+        .sw-dashboard-index__intro-image {
+            padding: 0 32px;
+            min-width: 200px;
+
+            img {
+                width: 100%;
+            }
+        }
+    }
+
+    .sw-dashboard-index__card-headline {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        max-width: 800px;
+        margin: 0 auto;
+        padding-top: 32px;
+        padding-bottom: 16px;
+
+        h1 {
+            color: $color-darkgray-200;
+            font-size: ($font-size-default * 1.75);
+            font-weight: normal;
+            margin-bottom: 0;
+        }
+
+        .sw-dashboard-index__card-headline-timerange {
+            font-size: ($font-size-default * 1.5);
+            color: $color-gray-500;
+        }
+    }
+
+    .sw-dashboard-index__intro-stats-today-stats {
+        display: flex;
+        justify-content: center;
+        padding: 40px 20px;
+        border-bottom: 1px solid $color-gray-300;
+
+        .sw-dashboard-index__intro-stats-today-single-stat {
+            display: flex;
+            margin-right: 40px;
+        }
+
+        .sw-dashboard-index__intro-stats-today-single-stat-number-type {
+            font-size: $font-size-large;
+            color: $color-gray-800;
+            margin-top: 10px;
+            margin-right: 10px;
+        }
+
+        .sw-dashboard-index__intro-stats-today-single-stat-number-value {
+            font-size: ($font-size-large * 2.5);
+        }
+    }
+}
+
+@media screen and (max-width: 1360px) {
+    .sw-dashboard-index .sw-dashboard-index__card-headline {
+        max-width: 770px;
+    }
+}

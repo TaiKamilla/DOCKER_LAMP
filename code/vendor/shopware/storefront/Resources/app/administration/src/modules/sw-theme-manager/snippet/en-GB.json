@@ -1,0 +1,100 @@
+{
+  "sw-theme-manager": {
+    "general": {
+      "mainMenuItemGeneral": "Themes",
+      "placeholderSearchBar": "Search Themes",
+      "descriptionTextModule": "Manage themes here.",
+      "mainMenuHeader": "Your Themes",
+      "captionMediaUpload": "Upload an image",
+      "lockedToolTip": "Themes installed via plugin are locked and can not be deleted",
+      "titleError": "Error",
+      "messageSaveError": "Theme could not be assigned to the sales channel"
+    },
+    "sorting": {
+      "labelSort": "Sort by:",
+      "labelSortByCreatedAsc": "Creation date, ascending",
+      "labelSortByCreatedDsc": "Creation date, descending",
+      "labelSortByUpdatedAsc": "Modification date, ascending",
+      "labelSortByUpdatedDsc": "Modification date, descending"
+    },
+    "themeListItem": {
+      "edit": "Edit",
+      "delete": "Delete",
+      "rename": "Rename",
+      "duplicate": "Duplicate",
+      "emptyText": "No theme assigned",
+      "addPreviewImage": "Add preview",
+      "removePreviewImage": "Remove preview",
+      "notificationDeleteErrorTitle": "Error",
+      "notificationDeleteErrorMessage": "The Theme you want to delete is still allocated to at least one sales channel."
+    },
+    "modal": {
+      "modalTitleDelete":  "Delete theme",
+      "textDeleteInfo": "Are you sure you really want to delete the theme \"{themeName}\"?",
+      "buttonCancel":  "Cancel",
+      "buttonDelete": "Delete",
+      "modalTitleDuplicate": "Create duplicate",
+      "textDuplicateInfo": "If you create a duplicate, you can use the theme with a different colour configuration for additional sales channels.",
+      "labelDuplicateThemeName": "Name of the duplicate",
+      "placeholderDuplicateThemeName": "Enter name",
+      "buttonDuplicateTheme": "Create duplicate",
+      "modalTitleRename": "Rename",
+      "textRenameInfo": "Enter a new name for the theme.",
+      "labelRenameThemeName": "New theme name",
+      "placeholderRenameThemeName": "Enter name",
+      "buttonRenameTheme": "Save",
+      "modalTitleReset": "Reset theme",
+      "modalTextResetInfo": "Are you sure you want to reset the theme to the default settings?",
+      "modalTextResetAssigned": "This will change the visualization of your shop.",
+      "buttonSave": "Save",
+      "modalTitleSave": "Save theme",
+      "textSaveInfo": "Do you really want to save the changes? This will change the visualization of your shop."
+    },
+    "list": {
+      "titleSidebarItemRefresh": "Refresh",
+      "textThemeOverview": "Themes",
+      "gridHeaderName": "Name",
+      "gridHeaderCreated": "Created",
+      "gridHeaderAssignment": "Assigned sales channels"
+    },
+    "actions": {
+      "edit": "Edit",
+      "save": "Save",
+      "rename": "Rename",
+      "delete": "Delete",
+      "duplicate": "Create duplicate",
+      "useImageAs": "Use image as",
+      "buttonReset": "Reset to default",
+      "buttonCancel": "Cancel",
+      "buttonUseTheme": "Use theme",
+      "deleteDisablesToolTip": "Theme still assigned to a sales channel."
+    },
+    "detail": {
+      "description": "Description",
+      "salesChannel": "Assigned to the following sales channels",
+      "inheritanceInfo": "This theme is a duplicate and is derived from the \"{parentThemeName}\" theme.",
+      "label": {
+        "media": "Media",
+        "colors": "Colours",
+        "generalColors": "General colours",
+        "moreColors": "More colours",
+        "fonts": "Fonts",
+        "links": "Links",
+        "textcolor": "Text colour",
+        "surface": "Surface",
+        "frame": "Frame",
+        "text": "Text",
+        "headlines": "Headlines",
+        "socialMediaLinks": "Social media links",
+        "favicon": "Favicon",
+        "shopLogo": "Shop logo"
+      }
+    },
+    "themeModal": {
+      "actionCancel": "Cancel",
+      "actionConfirm": "Save",
+      "modalTitle": "Select theme",
+      "headline": "Available themes"
+    }
+  }
+}

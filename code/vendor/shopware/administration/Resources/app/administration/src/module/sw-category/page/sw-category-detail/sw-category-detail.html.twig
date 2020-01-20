@@ -1,0 +1,108 @@
+{% block sw_category %}
+    <sw-page class="sw-category" :class="pageClasses">
+        <template #search-bar>
+            {% block sw_category_search_bar %}
+                <sw-search-bar
+                    initialSearchType="category"
+                    :initialSearch="term"
+                    typeSearchAlwaysInContainer
+                    ref="searchBar"
+                    @search="onSearch">
+                </sw-search-bar>
+            {% endblock %}
+        </template>
+
+        <template #smart-bar-header>
+            {% block sw_category_smart_bar_header %}
+                <h2 v-if="category">{{ placeholder(category, 'name') }}</h2>
+                <h2 v-else>{{ $tc('sw-category.general.headlineCategories') }}</h2>
+            {% endblock %}
+        </template>
+
+        <template #language-switch>
+            {% block sw_category_language_switch %}
+                <sw-language-switch
+                    @on-change="onChangeLanguage"
+                    :saveChangesFunction="saveOnLanguageChange"
+                    :abortChangeFunction="abortOnLanguageChange">
+                </sw-language-switch>
+            {% endblock %}
+        </template>
+
+        <template #smart-bar-actions>
+            <template v-if="category">
+                {% block sw_category_smart_bar_abort %}
+                    <sw-button :disabled="isLoading" v-tooltip.bottom="tooltipCancel" @click="cancelEdit">
+                        {{ $tc('sw-product.detail.buttonCancel') }}
+                    </sw-button>
+                {% endblock %}
+                {% block sw_category_smart_bar_save %}
+                <sw-button-process v-if="category"
+                        class="sw-category-detail__save-action"
+                        :isLoading="isLoading"
+                        :processSuccess="isSaveSuccessful"
+                        :disabled="isLoading"
+                        variant="primary"
+                        @process-finish="saveFinish"
+                        v-tooltip.bottom="tooltipSave"
+                        @click.prevent="onSave">
+                    {{ $tc('sw-category.general.buttonSafeCategory') }}
+                </sw-button-process>
+                {% endblock %}
+            </template>
+        </template>
+
+        <template #side-content>
+            {% block sw_category_side_content %}
+                <sw-category-tree
+                    :categoryId="categoryId"
+                    :currentLanguageId="currentLanguageId"
+                    @unsaved-changes="openChangeModal"
+                ></sw-category-tree>
+            {% endblock %}
+        </template>
+
+        {% block sw_category_content %}
+            <template #content>
+
+                {% block sw_category_content_view %}
+                    <sw-category-view
+                        v-if="category"
+                        ref="categoryView"
+                        :isLoading="isLoading"
+                    ></sw-category-view>
+                {% endblock %}
+
+                {% block sw_category_content_discard_changes_modal %}
+                    <sw-discard-changes-modal v-if="isDisplayingLeavePageWarning"
+                                              @keep-editing="onLeaveModalClose(nextRoute)"
+                                              @discard-changes="onLeaveModalConfirm(nextRoute)">
+                    </sw-discard-changes-modal>
+                {% endblock %}
+
+                {% block sw_category_content_loader %}
+                    <sw-loader v-if="isLoading"></sw-loader>
+                {% endblock %}
+
+                {% block sw_category_content_empty %}
+                    <sw-empty-state v-if="!category" :title="$tc('sw-category.general.emptyStateHeadline')"></sw-empty-state>
+                {% endblock %}
+            </template>
+
+        {% endblock %}
+
+        {% block sw_category_sidebar %}
+            <template #sidebar>
+                <sw-sidebar>
+                    <sw-sidebar-media-item ref="mediaSidebarItem">
+                        <template #context-menu-items="media">
+                            <sw-context-menu-item @click="setMediaItemFromSidebar(media.mediaItem)">
+                                {{ $tc('sw-category.general.useAsLogo') }}
+                            </sw-context-menu-item>
+                        </template>
+                    </sw-sidebar-media-item>
+                </sw-sidebar>
+            </template>
+        {% endblock %}
+    </sw-page>
+{% endblock %}

@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/shopware/platform/master/src/Core/System/SystemConfig/Schema/config.xsd">
+    <card>
+        <title>Login / registration</title>
+        <title lang="de-DE">Anmeldung / Registrierung</title>
+
+        <input-field type="int">
+            <name>passwordMinLength</name>
+            <label>Minimum password length (registration)</label>
+            <label lang="de-DE">Passwort-Mindestlänge (Registrierung)</label>
+        </input-field>
+
+        <input-field type="bool">
+            <name>customerIpAddressesNotAnonymously</name>
+            <label>Store customer IP addresses not anonymously</label>
+            <label lang="de-DE">Kunden-IP-Adressen nicht anonym speichern</label>
+        </input-field>
+
+        <input-field type="bool">
+            <name>showTitleField</name>
+            <label>Show title</label>
+            <label lang="de-DE">Titel anzeigen</label>
+        </input-field>
+
+        <input-field type="bool">
+            <name>requireEmailConfirmation</name>
+            <label>Email address must be entered twice</label>
+            <label lang="de-DE">E-Mail-Adresse muss zweimal eingegeben werden</label>
+            <helpText>Email address is queried twice to avoid input errors.</helpText>
+            <helpText lang="de-DE">E-Mail-Adresse wird zweimal abgefragt, um Fehler bei der Eingabe zu vermeiden.</helpText>
+        </input-field>
+
+        <input-field type="bool">
+            <name>doubleOptInRegistration</name>
+            <label>Double opt in registration</label>
+            <label lang="de-DE">Double-Opt-In-Registrierung</label>
+            <helpText>Activates double opt in for registrations.</helpText>
+            <helpText lang="de-DE">Aktiviert Double-Opt-In für Registrierungen.</helpText>
+        </input-field>
+
+        <input-field type="bool">
+            <name>doubleOptInGuestOrder</name>
+            <label>Double opt in guest order</label>
+            <label lang="de-DE">Double-Opt-In-Gast-Bestellung</label>
+            <helpText>Activates double opt in for guest orders.</helpText>
+            <helpText lang="de-DE">Aktiviert Double-Opt-In für Gast-Bestellungen.</helpText>
+        </input-field>
+
+        <input-field>
+            <name>doubleOptInDomain</name>
+            <label>Double opt in register domain</label>
+            <label lang="de-DE">Double-Opt-In-Anmeldedomain</label>
+            <placeholder>Enter register domain...</placeholder>
+            <placeholder lang="de-DE">Anmeldedomain eingeben...</placeholder>
+            <helpText>Set the domain for the double opt in registration or guest order (example domain: http://localhost:8000)</helpText>
+            <helpText lang="de-DE">Setze die Domain für die Double-Opt-In-Registrierung oder Gastbestellung (Beispiel-Domain: http://localhost:8000)</helpText>
+        </input-field>
+
+        <input-field type="bool">
+            <name>requirePasswordConfirmation</name>
+            <label>Password must be entered twice</label>
+            <label lang="de-DE">Passwort muss zweimal eingegeben werden</label>
+            <helpText>Password is queried twice to avoid input errors.</helpText>
+            <helpText lang="de-DE">Passwort wird zweimal abgefragt, um Fehler bei der Eingabe zu vermeiden.</helpText>
+        </input-field>
+
+        <input-field type="bool">
+            <name>showPhoneNumberField</name>
+            <label>Show phone number</label>
+            <label lang="de-DE">Telefonnummer anzeigen</label>
+        </input-field>
+
+        <input-field type="bool">
+            <name>phoneNumberFieldRequired</name>
+            <label>Phone number field required</label>
+            <label lang="de-DE">Telefonnummer als Pflichtfeld behandeln</label>
+        </input-field>
+
+        <input-field type="bool">
+            <name>showBirthdayField</name>
+            <label>Show birthday field</label>
+            <label lang="de-DE">Geburtstag anzeigen</label>
+        </input-field>
+
+        <input-field type="bool">
+            <name>birthdayFieldRequired</name>
+            <label>Birthday field required</label>
+            <label lang="de-DE">Geburtstag als Pflichtfeld behandeln</label>
+        </input-field>
+
+        <input-field type="bool">
+            <name>showAccountTypeSelection</name>
+            <label>Show selection between company and customer account</label>
+            <label lang="de-DE">Auswahl zwischen Firmen- und Kundenkonto anzeigen</label>
+        </input-field>
+
+        <input-field type="bool">
+            <name>showAdditionalAddressField1</name>
+            <label>Show additional address field 1</label>
+            <label lang="de-DE">Adresszusatzzeile 1 anzeigen</label>
+        </input-field>
+
+        <input-field type="bool">
+            <name>additionalAddressField1Required</name>
+            <label>Additional address 1 field required</label>
+            <label lang="de-DE">Adresszusatzzeile 1 als Pflichtfeld behandeln</label>
+        </input-field>
+
+        <input-field type="bool">
+            <name>showAdditionalAddressField2</name>
+            <label>Show additional address field 2</label>
+            <label lang="de-DE">Adresszusatzzeile 2 anzeigen</label>
+        </input-field>
+
+        <input-field type="bool">
+            <name>additionalAddressField2Required</name>
+            <label>Additional address 2 field required</label>
+            <label lang="de-DE">Adresszusatzzeile 1 als Pflichtfeld behandeln</label>
+        </input-field>
+
+        <input-field type="single-select">
+            <name>registrationCaptcha</name>
+            <options>
+                <option>
+                    <id>none</id>
+                    <name>No Captcha</name>
+                    <name lang="de-DE">Kein Captcha</name>
+                </option>
+                <option>
+                    <id>default</id>
+                    <name>Default (Numbers / Letters)</name>
+                    <name lang="de-DE">Standard (Zahlen / Buchstaben)</name>
+                </option>
+                <option>
+                    <id>honeypot</id>
+                    <name>Honeypot (invisible)</name>
+                    <name lang="de-DE">Honeypot (unsichtbar)</name>
+                </option>
+            </options>
+            <label>Use captcha in registration</label>
+            <label lang="de-DE">Captcha in Registrierung verwenden</label>
+        </input-field>
+    </card>
+</config>

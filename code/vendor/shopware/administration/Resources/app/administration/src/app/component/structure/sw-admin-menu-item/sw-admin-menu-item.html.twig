@@ -1,0 +1,87 @@
+{% block sw_admin_menu_item %}
+    <li class="sw-admin-menu__navigation-list-item"
+        :class="getItemName(entry.id || entry.path)"
+        @click="$emit('menu-item-click', entry, $event.currentTarget)"
+        @mouseover="$emit('menu-item-hover', entry, $event.currentTarget, parentEntries)"
+        @mouseleave="$emit('menu-item-leave', entry, $event.currentTarget, parentEntries)">
+
+        {% block sw_admin_menu_item_router_link %}
+            <router-link v-if="entry.path"
+                         class="sw-admin-menu__navigation-link"
+                         :class="{'router-link-active': subIsActive(entry.path)}"
+                         :to="getLinkToProp">
+
+                {% block sw_admin_menu_item_icon %}
+                    <sw-icon v-if="displayIcon"
+                             :size="iconSize"
+                             class="sw-admin-menu__navigation-link-icon"
+                             :name="getIconName(entry.icon)"
+                             :style="{ 'color': entry.color }">
+                    </sw-icon>
+                {% endblock %}
+
+                {% block sw_admin_menu_item_text %}
+                    <span :class="collapsibleText ? 'collapsible-text' : ''">
+                        {{ getEntryLabel }}
+                    </span>
+                {% endblock %}
+            </router-link>
+        {% endblock %}
+
+        {% block sw_admin_menu_item_external_link %}
+            <a v-else-if="entry.link"
+               :href="entry.link"
+               :target="entry.target"
+               :title="$tc(entry.label)"
+               class="sw-admin-menu__navigation-link">
+
+                {% block sw_admin_menu_item_icon %}
+                    <sw-icon v-if="displayIcon"
+                             :size="iconSize"
+                             class="sw-admin-menu__navigation-link-icon"
+                             :name="getIconName(entry.icon)"
+                             :style="{ 'color': entry.color }">
+                    </sw-icon>
+                {% endblock %}
+
+                {% block sw_admin_menu_item_text %}
+                    <span :class="collapsibleText ? 'collapsible-text' : ''">
+                        {{ $tc(entry.label) }}
+                    </span>
+                {% endblock %}
+            </a>
+        {% endblock %}
+
+        {% block sw_admin_menu_item_navigation_link %}
+            <span class="sw-admin-menu__navigation-link"
+                  :class="{ 'router-link-active': subIsActive(entry.id) }"
+                  v-else>
+
+                {% block sw_admin_menu_item_icon %}
+                    <sw-icon v-if="displayIcon"
+                             :size="iconSize"
+                             class="sw-admin-menu__navigation-link-icon"
+                             :name="getIconName(entry.icon)"
+                             :style="{ 'color': entry.color }">
+                    </sw-icon>
+                {% endblock %}
+
+                {% block sw_admin_menu_item_text %}
+                     <span :class="collapsibleText ? 'collapsible-text' : ''">
+                        {{ $tc(entry.label) }}
+                     </span>
+                {% endblock %}
+            </span>
+        {% endblock %}
+
+        {% block sw_sidebar_sub_items_list %}
+            <ul v-if="sidebarExpanded && entry.children.length > 0" class="sw-admin-menu__sub-navigation-list">
+                <sw-admin-menu-item v-for="entry in entry.children"
+                                    :entry="entry"
+                                    :key="entry.id || entry.path"
+                                    :displayIcon="false">
+                </sw-admin-menu-item>
+            </ul>
+        {% endblock %}
+    </li>
+{% endblock %}

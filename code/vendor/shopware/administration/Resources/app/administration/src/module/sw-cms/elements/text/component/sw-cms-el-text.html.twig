@@ -1,0 +1,16 @@
+{% block sw_cms_element_text %}
+    <div class="sw-cms-el-text">
+        <div class="sw-cms-el-text__mapping-preview content-editor"
+             v-html="$sanitize(demoValue)"
+             v-if="element.config.content.source === 'mapped'">
+        </div>
+
+        <sw-text-editor v-else
+                        v-model="element.config.content.value"
+                        @blur="onBlur"
+                        @input="onInput"
+                        :verticalAlign="element.config.verticalAlign.value"
+                        :isInlineEdit="true">
+        </sw-text-editor>
+    </div>
+{% endblock %}

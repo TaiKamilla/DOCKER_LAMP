@@ -1,0 +1,4 @@
+shopware:
+    api:
+        api_browser:
+            auth_required: false

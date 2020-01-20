@@ -1,0 +1,54 @@
+@import "~scss/variables";
+
+.sw-plugin-list {
+    .sw-plugin-list__plugin-info-container {
+        display: flex;
+        align-items: center;
+
+        img {
+            margin-right: 10px;
+            height: 32px;
+            width: 32px;
+        }
+
+        .sw-plugin-list__plugin-info {
+            display: flex;
+            flex-direction: column;
+
+            .sw-plugin-list__author-name {
+                color: $color-gray;
+                font-size: $font-size-small;
+            }
+        }
+    }
+
+    .sw-plugin-manager__top-actions {
+        padding-right: 14px;
+    }
+
+    .sw-grid-row {
+        align-items: center;
+    }
+
+    .sw-plugin-list__sort_field {
+        display: flex;
+        align-items: center;
+
+        .sw-field__label {
+            margin-bottom: 0;
+            margin-right: 8px;
+        }
+
+        .sw-block-field__block {
+            width: 250px;
+        }
+    }
+
+    .sw-plugin-list__listing {
+        border-radius: $border-radius-default;
+    }
+
+    .sw-plugin-list__switch-active .sw-field--switch__content {
+        background: 0;
+    }
+}

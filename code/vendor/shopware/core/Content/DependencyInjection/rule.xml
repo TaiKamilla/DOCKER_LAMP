@@ -1,0 +1,41 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <service id="Shopware\Core\Content\Rule\RuleDefinition">
+            <tag name="shopware.entity.definition" entity="rule"/>
+        </service>
+        <service id="Shopware\Core\Content\Rule\Aggregate\RuleCondition\RuleConditionDefinition">
+            <tag name="shopware.entity.definition" entity="rule_condition"/>
+        </service>
+
+        <service id="Shopware\Core\Content\Rule\DataAbstractionLayer\Indexing\RulePayloadIndexer">
+            <argument type="service" id="Doctrine\DBAL\Connection"/>
+            <argument type="service" id="event_dispatcher"/>
+            <argument type="service" id="Shopware\Core\Framework\Rule\Collector\RuleConditionRegistry"/>
+            <argument type="service" id="Shopware\Core\Framework\DataAbstractionLayer\Cache\EntityCacheKeyGenerator"/>
+            <argument type="service" id="Shopware\Core\Framework\Adapter\Cache\CacheClearer"/>
+            <argument type="service" id="Shopware\Core\Framework\DataAbstractionLayer\Dbal\Common\IteratorFactory"/>
+            <argument type="service" id="Shopware\Core\Content\Rule\RuleDefinition"/>
+
+            <tag name="kernel.event_subscriber"/>
+            <tag name="shopware.dal_indexing.indexer"/>
+        </service>
+
+        <service id="Shopware\Core\Content\Rule\RuleValidator">
+            <argument type="service" id="validator"/>
+            <argument type="service" id="Shopware\Core\Framework\Rule\Collector\RuleConditionRegistry"/>
+            <argument type="service" id="rule_condition.repository" />
+
+            <tag name="kernel.event_subscriber"/>
+        </service>
+
+        <service id="Shopware\Core\Content\Rule\DataAbstractionLayer\RulePayloadSubscriber">
+            <argument type="service" id="Shopware\Core\Content\Rule\DataAbstractionLayer\Indexing\RulePayloadIndexer"/>
+
+            <tag name="kernel.event_subscriber"/>
+        </service>
+    </services>
+</container>

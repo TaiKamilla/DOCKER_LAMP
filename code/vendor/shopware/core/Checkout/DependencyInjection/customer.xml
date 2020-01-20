@@ -1,0 +1,132 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service id="Shopware\Core\Checkout\Customer\CustomerDefinition">
+            <tag name="shopware.entity.definition" entity="customer"/>
+            <tag name="shopware.composite_search.definition" priority="900"/>
+        </service>
+
+        <service id="Shopware\Core\Checkout\Customer\Aggregate\CustomerGroupTranslation\CustomerGroupTranslationDefinition">
+            <tag name="shopware.entity.definition" entity="customer_group_translation"/>
+        </service>
+
+        <service id="Shopware\Core\Checkout\Customer\Aggregate\CustomerAddress\CustomerAddressDefinition">
+            <tag name="shopware.entity.definition" entity="customer_address"/>
+        </service>
+
+        <service id="Shopware\Core\Checkout\Customer\Aggregate\CustomerRecovery\CustomerRecoveryDefinition">
+            <tag name="shopware.entity.definition" entity="customer_recovery"/>
+        </service>
+
+        <service id="Shopware\Core\Checkout\Customer\Aggregate\CustomerGroup\CustomerGroupDefinition">
+            <tag name="shopware.entity.definition" entity="customer_group"/>
+        </service>
+
+        <service id="Shopware\Core\Checkout\Customer\Aggregate\CustomerTag\CustomerTagDefinition">
+            <tag name="shopware.entity.definition" entity="customer_tag"/>
+        </service>
+
+        <service id="Shopware\Core\Checkout\Customer\SalesChannel\AccountService">
+            <argument type="service" id="customer_address.repository"/>
+            <argument type="service" id="customer.repository"/>
+            <argument type="service" id="customer_recovery.repository"/>
+            <argument type="service" id="Shopware\Core\System\SalesChannel\Context\SalesChannelContextPersister"/>
+            <argument type="service" id="event_dispatcher"/>
+            <argument type="service" id="Shopware\Core\Framework\Validation\DataValidator"/>
+            <argument type="service" id="Shopware\Core\Checkout\Customer\Validation\CustomerProfileValidationService"/>
+            <argument type="service" id="Shopware\Core\Checkout\Customer\Password\LegacyPasswordVerifier"/>
+            <argument type="service" id="payment_method.repository"/>
+            <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
+            <argument type="service" id="router"/>
+        </service>
+
+        <service id="Shopware\Core\Checkout\Customer\SalesChannel\SalesChannelCustomerController" public="true">
+            <argument type="service" id="serializer"/>
+            <argument type="service" id="Shopware\Core\Checkout\Customer\SalesChannel\AccountService"/>
+            <argument type="service" id="order.repository"/>
+            <argument type="service" id="Shopware\Core\Checkout\Customer\SalesChannel\AccountRegistrationService"/>
+            <argument type="service" id="Shopware\Core\Checkout\Customer\SalesChannel\AddressService"/>
+            <argument type="service" id="Shopware\Core\Checkout\Customer\CustomerDefinition"/>
+            <argument type="service" id="Shopware\Core\Checkout\Customer\Aggregate\CustomerAddress\CustomerAddressDefinition"/>
+            <argument type="service" id="Shopware\Core\Framework\Api\Converter\ApiVersionConverter"/>
+            <call method="setContainer">
+                <argument type="service" id="service_container"/>
+            </call>
+        </service>
+
+        <service id="Shopware\Core\Checkout\Customer\SalesChannel\AccountRegistrationService">
+            <argument type="service" id="customer.repository"/>
+            <argument type="service" id="Shopware\Core\Framework\Event\BusinessEventDispatcher"/>
+            <argument type="service" id="Shopware\Core\System\NumberRange\ValueGenerator\NumberRangeValueGeneratorInterface"/>
+            <argument type="service" id="Shopware\Core\Framework\Validation\DataValidator"/>
+            <argument type="service" id="Shopware\Core\Checkout\Customer\Validation\CustomerValidationService"/>
+            <argument type="service" id="Shopware\Core\Checkout\Customer\Validation\AddressValidationService"/>
+            <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
+            <argument type="service" id="sales_channel_domain.repository"/>
+        </service>
+
+        <service id="Shopware\Core\Checkout\Customer\SalesChannel\AddressService">
+            <argument type="service" id="country.repository" />
+            <argument type="service" id="customer_address.repository"/>
+            <argument type="service" id="Shopware\Core\Checkout\Customer\Validation\AddressValidationService"/>
+            <argument type="service" id="Shopware\Core\Framework\Validation\DataValidator"/>
+            <argument type="service" id="event_dispatcher"/>
+            <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
+        </service>
+
+        <service id="Shopware\Core\Checkout\Customer\Validation\AddressValidationService">
+            <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
+        </service>
+
+        <service id="Shopware\Core\Checkout\Customer\Validation\CustomerProfileValidationService">
+            <argument type="service" id="Shopware\Core\System\Salutation\SalutationDefinition"/>
+            <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
+        </service>
+
+        <service id="Shopware\Core\Checkout\Customer\Validation\CustomerValidationService">
+            <argument type="service" id="Shopware\Core\Checkout\Customer\Validation\CustomerProfileValidationService"/>
+        </service>
+
+        <service id="Shopware\Core\Checkout\Customer\Validation\Constraint\CustomerEmailUniqueValidator">
+            <argument type="service" id="customer.repository"/>
+
+            <tag name="validator.constraint_validator"/>
+        </service>
+
+        <service id="Shopware\Core\Checkout\Customer\Validation\Constraint\CustomerPasswordMatchesValidator">
+            <argument type="service" id="Shopware\Core\Checkout\Customer\SalesChannel\AccountService"/>
+
+            <tag name="validator.constraint_validator"/>
+        </service>
+
+        <service id="Shopware\Core\Checkout\Customer\Password\LegacyEncoder\Md5">
+            <tag name="shopware.legacy_encoder"/>
+        </service>
+
+        <service id="Shopware\Core\Checkout\Customer\Password\LegacyEncoder\Sha256">
+            <tag name="shopware.legacy_encoder"/>
+        </service>
+
+        <service id="Shopware\Core\Checkout\Customer\Password\LegacyPasswordVerifier">
+            <argument type="tagged" tag="shopware.legacy_encoder" />
+        </service>
+
+        <service id="Shopware\Core\Checkout\Customer\Subscriber\CustomerMetaFieldSubscriber">
+            <argument type="service" id="order.repository"/>
+            <argument type="service" id="customer.repository"/>
+
+            <tag name="kernel.event_subscriber"/>
+        </service>
+
+        <service id="Shopware\Core\Checkout\Customer\Subscriber\CustomerRemoteAddressSubscriber">
+            <argument type="service" id="customer.repository"/>
+            <argument type="service" id="request_stack"/>
+
+            <tag name="kernel.event_subscriber"/>
+        </service>
+    </services>
+</container>

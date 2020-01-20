@@ -1,0 +1,187 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service id="Shopware\Core\Framework\Plugin\KernelPluginLoader\KernelPluginLoader" public="true">
+            <factory service="kernel" method="getPluginLoader" />
+        </service>
+
+        <service id="Shopware\Core\Framework\Plugin\KernelPluginCollection" public="true">
+            <factory service="Shopware\Core\Framework\Plugin\KernelPluginLoader\KernelPluginLoader" method="getPluginInstances"/>
+        </service>
+
+        <service id="Shopware\Core\Framework\Plugin\Command\BundleDumpCommand">
+            <argument type="service" id="Shopware\Core\Framework\Plugin\BundleConfigDumper"/>
+
+            <tag name="console.command"/>
+        </service>
+
+        <service id="Shopware\Core\Framework\Plugin\BundleConfigDumper">
+            <argument type="service" id="kernel" />
+            <argument type="service" id="plugin.repository" />
+
+            <tag name="kernel.event_subscriber" />
+        </service>
+
+        <service id="Shopware\Core\Framework\Plugin\PluginDefinition">
+            <tag name="shopware.entity.definition" entity="plugin"/>
+        </service>
+
+        <service id="Shopware\Core\Framework\Plugin\Aggregate\PluginTranslation\PluginTranslationDefinition">
+            <tag name="shopware.entity.definition" entity="plugin_translation"/>
+        </service>
+
+        <service id="Shopware\Core\Framework\Plugin\PluginService">
+            <argument>%kernel.plugin_dir%</argument>
+            <argument>%kernel.project_dir%</argument>
+            <argument type="service" id="plugin.repository"/>
+            <argument type="service" id="language.repository"/>
+            <argument type="service" id="Shopware\Core\Framework\Plugin\Changelog\ChangelogService"/>
+            <argument type="service" id="Shopware\Core\Framework\Plugin\Util\PluginFinder"/>
+            <argument type="service" id="Shopware\Core\Framework\Plugin\Util\VersionSanitizer"/>
+        </service>
+
+        <service id="Shopware\Core\Framework\Plugin\PluginLifecycleService">
+            <argument type="service" id="plugin.repository"/>
+            <argument type="service" id="event_dispatcher"/>
+            <argument type="service" id="Shopware\Core\Framework\Plugin\KernelPluginCollection"/>
+            <argument type="service" id="service_container"/>
+            <argument type="service" id="Shopware\Core\Framework\Migration\MigrationCollection"/>
+            <argument type="service" id="Shopware\Core\Framework\Migration\MigrationCollectionLoader"/>
+            <argument type="service" id="Shopware\Core\Framework\Migration\MigrationRuntime"/>
+            <argument type="service" id="Doctrine\DBAL\Connection"/>
+            <argument type="service" id="Shopware\Core\Framework\Plugin\Util\AssetService"/>
+            <argument type="service" id="Shopware\Core\Framework\Plugin\Composer\CommandExecutor"/>
+            <argument type="service" id="Shopware\Core\Framework\Plugin\Requirement\RequirementsValidator"/>
+            <argument type="service" id="cache.messenger.restart_workers_signal" />
+            <argument>%kernel.shopware_version%</argument>
+            <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService" />
+        </service>
+
+        <service id="Shopware\Core\Framework\Plugin\Changelog\ChangelogParser"/>
+
+        <service id="Shopware\Core\Framework\Plugin\Changelog\ChangelogService">
+            <argument type="service" id="Shopware\Core\Framework\Plugin\Changelog\ChangelogParser"/>
+        </service>
+
+        <service id="Shopware\Core\Framework\Plugin\PluginManagementService">
+            <argument>%kernel.project_dir%</argument>
+            <argument type="service" id="Shopware\Core\Framework\Plugin\PluginZipDetector"/>
+            <argument type="service" id="Shopware\Core\Framework\Plugin\PluginExtractor"/>
+            <argument type="service" id="Shopware\Core\Framework\Plugin\PluginService"/>
+            <argument type="service" id="Symfony\Component\Filesystem\Filesystem"/>
+        </service>
+
+        <service id="Shopware\Core\Framework\Plugin\PluginExtractor">
+            <argument>%kernel.plugin_dir%</argument>
+            <argument type="service" id="Symfony\Component\Filesystem\Filesystem"/>
+        </service>
+
+        <service id="Shopware\Core\Framework\Plugin\PluginZipDetector"/>
+
+        <!-- Commands -->
+        <service id="Shopware\Core\Framework\Plugin\Command\PluginRefreshCommand">
+            <argument type="service" id="Shopware\Core\Framework\Plugin\PluginService"/>
+
+            <tag name="console.command"/>
+        </service>
+
+        <service id="Shopware\Core\Framework\Plugin\Command\PluginListCommand">
+            <argument type="service" id="plugin.repository"/>
+
+            <tag name="console.command"/>
+        </service>
+
+        <service id="Shopware\Core\Framework\Plugin\Command\Lifecycle\PluginInstallCommand">
+            <argument type="service" id="Shopware\Core\Framework\Plugin\PluginLifecycleService"/>
+            <argument type="service" id="plugin.repository"/>
+            <argument type="service" id="Shopware\Core\Framework\Adapter\Cache\CacheClearer"/>
+
+            <tag name="console.command"/>
+        </service>
+
+        <service id="Shopware\Core\Framework\Plugin\Command\Lifecycle\PluginActivateCommand">
+            <argument type="service" id="Shopware\Core\Framework\Plugin\PluginLifecycleService"/>
+            <argument type="service" id="plugin.repository"/>
+            <argument type="service" id="Shopware\Core\Framework\Adapter\Cache\CacheClearer"/>
+
+            <tag name="console.command"/>
+        </service>
+
+        <service id="Shopware\Core\Framework\Plugin\Command\Lifecycle\PluginUpdateCommand">
+            <argument type="service" id="Shopware\Core\Framework\Plugin\PluginLifecycleService"/>
+            <argument type="service" id="plugin.repository"/>
+            <argument type="service" id="Shopware\Core\Framework\Adapter\Cache\CacheClearer"/>
+
+            <tag name="console.command"/>
+        </service>
+
+        <service id="Shopware\Core\Framework\Plugin\Command\Lifecycle\PluginDeactivateCommand">
+            <argument type="service" id="Shopware\Core\Framework\Plugin\PluginLifecycleService"/>
+            <argument type="service" id="plugin.repository"/>
+            <argument type="service" id="Shopware\Core\Framework\Adapter\Cache\CacheClearer"/>
+
+            <tag name="console.command"/>
+        </service>
+
+        <service id="Shopware\Core\Framework\Plugin\Command\Lifecycle\PluginUninstallCommand">
+            <argument type="service" id="Shopware\Core\Framework\Plugin\PluginLifecycleService"/>
+            <argument type="service" id="plugin.repository"/>
+            <argument type="service" id="Shopware\Core\Framework\Adapter\Cache\CacheClearer"/>
+
+            <tag name="console.command"/>
+        </service>
+
+        <service id="Shopware\Core\Framework\Plugin\Subscriber\PluginLoadedSubscriber">
+            <tag name="kernel.event_subscriber"/>
+        </service>
+
+        <!-- Composer -->
+        <service id="Shopware\Core\Framework\Plugin\Composer\PackageProvider"/>
+
+        <service id="Shopware\Core\Framework\Plugin\Composer\CommandExecutor">
+            <argument>%kernel.project_dir%</argument>
+        </service>
+
+        <!-- Controller -->
+        <service id="Shopware\Core\Framework\Plugin\Api\PluginController" public="true">
+            <argument type="service" id="Shopware\Core\Framework\Plugin\PluginService"/>
+            <argument type="service" id="Shopware\Core\Framework\Plugin\PluginLifecycleService"/>
+            <argument type="service" id="Shopware\Core\Framework\Plugin\PluginManagementService"/>
+            <argument type="service" id="Shopware\Core\Framework\Api\Converter\ApiVersionConverter"/>
+            <argument type="service" id="Shopware\Core\Framework\Plugin\PluginDefinition"/>
+        </service>
+
+        <!-- Helper -->
+        <service id="Shopware\Core\Framework\Plugin\Util\PluginIdProvider" public="true">
+            <argument type="service" id="plugin.repository"/>
+        </service>
+
+        <service id="Shopware\Core\Framework\Plugin\Util\AssetService">
+            <argument type="service" id="shopware.filesystem.public"/>
+            <argument type="service" id="kernel"/>
+            <argument type="service" id="Shopware\Core\Framework\Plugin\KernelPluginCollection"/>
+        </service>
+
+        <!-- Requirement -->
+        <service id="Shopware\Core\Framework\Plugin\Requirement\RequirementsValidator">
+            <argument type="service" id="plugin.repository"/>
+            <argument>%kernel.project_dir%</argument>
+        </service>
+
+        <service id="Shopware\Core\Framework\Plugin\Util\PluginFinder">
+            <argument type="service" id="Shopware\Core\Framework\Plugin\Composer\PackageProvider"/>
+        </service>
+
+        <service id="Shopware\Core\Framework\Plugin\Util\VersionSanitizer"/>
+
+        <service id="Shopware\Core\Framework\Plugin\Command\PluginCreateCommand">
+            <argument>%kernel.project_dir%</argument>
+
+            <tag name="console.command"/>
+        </service>
+    </services>
+</container>

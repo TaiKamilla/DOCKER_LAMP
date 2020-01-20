@@ -1,0 +1,298 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <service id="Shopware\Core\Framework\Routing\RequestTransformerInterface"
+                 class="Shopware\Core\Framework\Routing\RequestTransformer"
+                 public="true"/>
+
+        <service id="Shopware\Core\Framework\Api\Controller\FallbackController" public="true">
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+        </service>
+
+        <service id="Shopware\Core\Framework\Api\EventListener\CorsListener">
+            <tag name="kernel.event_subscriber"/>
+        </service>
+
+        <service id="Shopware\Core\Framework\Api\EventListener\ResponseExceptionListener">
+            <tag name="kernel.event_subscriber"/>
+            <argument>%kernel.debug%</argument>
+        </service>
+
+        <service id="Shopware\Core\Framework\Api\EventListener\ResponseHeaderListener">
+            <tag name="kernel.event_subscriber"/>
+        </service>
+
+        <service id="Shopware\Core\Framework\Api\Context\ContextValueResolver">
+            <tag name="controller.argument_value_resolver" priority="1000"/>
+        </service>
+
+        <service id="Shopware\Core\Framework\Api\Controller\AccessKeyController" public="true">
+            <call method="setContainer">
+                <argument type="service" id="service_container"/>
+            </call>
+        </service>
+
+        <service id="Shopware\Core\Framework\Api\Controller\ApiController" public="true">
+            <argument type="service" id="Shopware\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry"/>
+            <argument type="service" id="serializer"/>
+            <argument type="service" id="Shopware\Core\Framework\DataAbstractionLayer\Search\RequestCriteriaBuilder"/>
+            <argument type="service" id="Shopware\Core\Framework\DataAbstractionLayer\Search\CompositeEntitySearcher"/>
+            <argument type="service" id="Shopware\Core\Framework\Api\Converter\ApiVersionConverter"/>
+            <call method="setContainer">
+                <argument type="service" id="service_container"/>
+            </call>
+        </service>
+
+        <service id="Shopware\Core\Framework\DataAbstractionLayer\Search\CompositeEntitySearcher">
+            <argument type="service" id="Shopware\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry"/>
+            <argument type="service" id="Shopware\Core\Framework\Api\Converter\ApiVersionConverter"/>
+            <argument type="tagged" tag="shopware.composite_search.definition"/>
+        </service>
+
+        <service id="Shopware\Core\Framework\Api\Controller\SyncController" public="true">
+            <argument type="service" id="Shopware\Core\Framework\Api\Sync\SyncService"/>
+            <argument type="service" id="serializer"/>
+            <call method="setContainer">
+                <argument type="service" id="service_container"/>
+            </call>
+        </service>
+
+        <service id="Shopware\Core\Framework\Api\Controller\IndexingController" public="true">
+            <argument type="service" id="Shopware\Core\Framework\DataAbstractionLayer\Indexing\IndexerRegistryInterface"/>
+            <call method="setContainer">
+                <argument type="service" id="service_container"/>
+            </call>
+        </service>
+
+        <service id="Shopware\Core\Framework\Api\Command\DumpSchemaCommand">
+            <argument type="service" id="Shopware\Core\Framework\Api\ApiDefinition\DefinitionService"/>
+
+            <tag name="console.command"/>
+        </service>
+
+        <!-- Serializer -->
+        <service id="Shopware\Core\Framework\Api\Serializer\JsonApiDecoder">
+            <tag name="serializer.encoder"/>
+        </service>
+
+        <!-- Response types -->
+        <service id="Shopware\Core\Framework\Api\Response\ResponseFactoryRegistry">
+            <argument type="service" id="Shopware\Core\Framework\Api\Response\Type\Api\JsonApiType"/>
+            <!-- deactivated, the current sales channel api design does not match the json api requirements -->
+            <argument type="service" id="Shopware\Core\Framework\Api\Response\Type\SalesChannel\JsonApiType"/>
+            <argument type="service" id="Shopware\Core\Framework\Api\Response\Type\Api\JsonType"/>
+            <argument type="service" id="Shopware\Core\Framework\Api\Response\Type\SalesChannel\JsonType"/>
+        </service>
+
+        <service id="Shopware\Core\Framework\Api\Response\Type\Api\JsonApiType">
+            <argument type="service" id="Shopware\Core\Framework\Api\Serializer\JsonApiEncoder"/>
+        </service>
+
+        <service id="Shopware\Core\Framework\Api\Response\Type\SalesChannel\JsonApiType">
+            <argument type="service" id="Shopware\Core\Framework\Api\Serializer\JsonApiEncoder"/>
+        </service>
+
+        <service id="Shopware\Core\Framework\Api\Serializer\JsonApiEncoder">
+            <argument type="service" id="Shopware\Core\Framework\Api\Converter\ApiVersionConverter"/>
+        </service>
+
+        <service id="Shopware\Core\Framework\Api\Serializer\JsonEntityEncoder">
+            <argument type="service" id="serializer"/>
+            <argument type="service" id="Shopware\Core\Framework\Api\Converter\ApiVersionConverter"/>
+        </service>
+
+        <service id="Shopware\Core\Framework\Api\Response\Type\Api\JsonType">
+            <argument type="service" id="Shopware\Core\Framework\Api\Serializer\JsonEntityEncoder"/>
+        </service>
+
+        <service id="Shopware\Core\Framework\Api\Response\Type\SalesChannel\JsonType">
+            <argument type="service" id="Shopware\Core\Framework\Api\Serializer\JsonEntityEncoder"/>
+        </service>
+
+        <!-- Converter -->
+        <service id="Shopware\Core\Framework\Api\Converter\ConverterRegistry">
+            <argument type="tagged" tag="shopware.api.converter"/>
+        </service>
+
+        <service id="Shopware\Core\Framework\Api\Converter\ApiVersionConverter">
+            <argument type="service" id="Shopware\Core\Framework\Api\Converter\ConverterRegistry"/>
+        </service>
+
+        <!-- Api version -->
+        <service id="Shopware\Core\Framework\Api\ApiVersion\ApiVersionSubscriber">
+            <argument>%kernel.supported_api_versions%</argument>
+
+            <tag name="kernel.event_subscriber"/>
+        </service>
+
+        <!-- API Docs -->
+        <service id="Shopware\Core\Framework\Api\ApiDefinition\DefinitionService">
+            <argument type="service" id="Shopware\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry"/>
+            <argument type="service" id="Shopware\Core\System\SalesChannel\Entity\SalesChannelDefinitionInstanceRegistry"/>
+            <argument type="service" id="Shopware\Core\Framework\Api\ApiDefinition\Generator\OpenApi3Generator"/>
+            <argument type="service" id="Shopware\Core\Framework\Api\ApiDefinition\Generator\EntitySchemaGenerator"/>
+        </service>
+
+        <service id="Shopware\Core\Framework\Api\ApiDefinition\Generator\OpenApi\OpenApiDefinitionSchemaBuilder">
+        </service>
+
+        <service id="Shopware\Core\Framework\Api\ApiDefinition\Generator\OpenApi\OpenApiPathBuilder">
+        </service>
+
+        <service id="Shopware\Core\Framework\Api\ApiDefinition\Generator\OpenApi\OpenApiSchemaBuilder">
+        </service>
+
+        <service id="Shopware\Core\Framework\Api\ApiDefinition\Generator\OpenApi\OpenApiLoader">
+            <argument>%kernel.project_dir%</argument>
+        </service>
+
+        <service id="Shopware\Core\Framework\Api\ApiDefinition\Generator\OpenApi3Generator">
+            <argument type="service" id="Shopware\Core\Framework\Api\ApiDefinition\Generator\OpenApi\OpenApiSchemaBuilder"/>
+            <argument type="service" id="Shopware\Core\Framework\Api\ApiDefinition\Generator\OpenApi\OpenApiPathBuilder"/>
+            <argument type="service" id="Shopware\Core\Framework\Api\ApiDefinition\Generator\OpenApi\OpenApiDefinitionSchemaBuilder"/>
+            <argument type="service" id="Shopware\Core\Framework\Api\ApiDefinition\Generator\OpenApi\OpenApiLoader"/>
+        </service>
+
+        <service id="Shopware\Core\Framework\Api\ApiDefinition\Generator\EntitySchemaGenerator">
+        </service>
+
+        <service id="Shopware\Core\Framework\Api\Controller\InfoController" public="true">
+            <argument type="service" id="Shopware\Core\Framework\Api\ApiDefinition\DefinitionService"/>
+            <argument type="service" id="parameter_bag"/>
+            <argument type="service" id="Shopware\Core\Framework\Event\BusinessEventRegistry"/>
+            <argument type="service" id="kernel" />
+            <argument type="service" id="assets.packages" />
+            <call method="setContainer">
+                <argument type="service" id="service_container"/>
+            </call>
+        </service>
+
+        <service id="Shopware\Core\Framework\Api\Controller\AuthController" public="true">
+            <argument type="service" id="shopware.api.authorization_server"/>
+            <argument type="service" id="Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory"/>
+            <call method="setContainer">
+                <argument type="service" id="service_container"/>
+            </call>
+        </service>
+
+        <service id="Shopware\Core\Framework\Api\Controller\CacheController" public="true">
+            <argument type="service" id="Shopware\Core\Framework\Adapter\Cache\CacheClearer"/>
+            <call method="setContainer">
+                <argument type="service" id="service_container"/>
+            </call>
+        </service>
+
+        <!-- API OAuth Repositories -->
+        <service id="Shopware\Core\Framework\Api\OAuth\AccessTokenRepository"/>
+        <service id="Shopware\Core\Framework\Api\OAuth\ClientRepository">
+            <argument type="service" id="Doctrine\DBAL\Connection"/>
+        </service>
+        <service id="Shopware\Core\Framework\Api\OAuth\RefreshTokenRepository"/>
+
+        <service id="Shopware\Core\Framework\Api\OAuth\ScopeRepository">
+            <argument type="tagged" tag="shopware.oauth.scope"/>
+            <argument type="service" id="Doctrine\DBAL\Connection"/>
+        </service>
+
+        <service id="Shopware\Core\Framework\Api\OAuth\UserRepository">
+            <argument type="service" id="Doctrine\DBAL\Connection"/>
+        </service>
+
+        <!-- Scopes -->
+        <service id="Shopware\Core\Framework\Api\OAuth\Scope\WriteScope">
+            <tag name="shopware.oauth.scope"/>
+        </service>
+
+        <service id="Shopware\Core\Framework\Api\OAuth\Scope\AdminScope">
+            <tag name="shopware.oauth.scope"/>
+        </service>
+
+        <!-- API -->
+        <service class="League\OAuth2\Server\CryptKey" id="shopware.private_key">
+            <argument>file://%kernel.project_dir%/config/jwt/private.pem</argument>
+            <argument>shopware</argument>
+        </service>
+        <service class="League\OAuth2\Server\CryptKey" id="shopware.public_key">
+            <argument>file://%kernel.project_dir%/config/jwt/public.pem</argument>
+        </service>
+
+        <service class="League\OAuth2\Server\AuthorizationServer" id="shopware.api.authorization_server">
+            <argument type="service" id="Shopware\Core\Framework\Api\OAuth\ClientRepository"/>
+            <argument type="service" id="Shopware\Core\Framework\Api\OAuth\AccessTokenRepository"/>
+            <argument type="service" id="Shopware\Core\Framework\Api\OAuth\ScopeRepository"/>
+            <argument type="service" id="shopware.private_key"/>
+            <argument>%env(APP_SECRET)%</argument>
+        </service>
+
+        <service class="League\OAuth2\Server\ResourceServer" id="shopware.api.resource_server">
+            <argument type="service" id="Shopware\Core\Framework\Api\OAuth\AccessTokenRepository"/>
+            <argument type="service" id="shopware.public_key"/>
+            <argument type="service" id="League\OAuth2\Server\AuthorizationValidators\BearerTokenValidator"/>
+        </service>
+
+        <service id="League\OAuth2\Server\AuthorizationValidators\BearerTokenValidator">
+            <argument type="service" id="Shopware\Core\Framework\Api\OAuth\AccessTokenRepository"/>
+            <call method="setPublicKey">
+                <argument type="service" id="shopware.public_key"/>
+            </call>
+        </service>
+
+        <!-- Events -->
+        <service id="Shopware\Core\Framework\Api\EventListener\JsonRequestTransformerListener">
+            <tag name="kernel.event_subscriber"/>
+        </service>
+
+        <service id="Shopware\Core\Framework\Api\EventListener\Authentication\SalesChannelAuthenticationListener">
+            <tag name="kernel.event_subscriber"/>
+            <argument type="service" id="Doctrine\DBAL\Connection"/>
+            <argument type="service" id="Shopware\Core\Framework\Routing\RouteScopeRegistry"/>
+        </service>
+
+        <service id="Shopware\Core\Framework\Api\EventListener\Authentication\ApiAuthenticationListener">
+            <tag name="kernel.event_subscriber"/>
+            <argument type="service" id="shopware.api.resource_server"/>
+            <argument type="service" id="shopware.api.authorization_server"/>
+            <argument type="service" id="Shopware\Core\Framework\Api\OAuth\UserRepository"/>
+            <argument type="service" id="Shopware\Core\Framework\Api\OAuth\RefreshTokenRepository"/>
+            <argument type="service" id="Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory"/>
+            <argument type="service" id="Shopware\Core\Framework\Routing\RouteScopeRegistry"/>
+        </service>
+
+        <service id="Shopware\Core\Framework\Api\Controller\UserController" public="true">
+            <argument type="service" id="user.repository"/>
+            <argument type="service" id="Shopware\Core\System\User\UserDefinition"/>
+            <call method="setContainer">
+                <argument type="service" id="service_container"/>
+            </call>
+        </service>
+
+        <service id="Shopware\Core\Framework\Api\Response\ResponseFactoryInterfaceValueResolver">
+            <tag name="controller.argument_value_resolver" priority="50"/>
+            <argument type="service" id="Shopware\Core\Framework\Api\Response\ResponseFactoryRegistry"/>
+        </service>
+
+        <service id="Shopware\Core\Framework\Api\Route\ApiRouteLoader">
+            <argument type="service" id="Shopware\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry"/>
+            <argument type="service" id="Shopware\Core\System\SalesChannel\Entity\SalesChannelDefinitionInstanceRegistry"/>
+            <tag name="routing.loader"/>
+        </service>
+
+        <service id="Shopware\Core\Framework\Validation\DataValidator">
+            <argument type="service" id="validator"/>
+        </service>
+
+        <service id="Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory">
+            <argument type="service" id="Nyholm\Psr7\Factory\Psr17Factory"/>
+            <argument type="service" id="Nyholm\Psr7\Factory\Psr17Factory"/>
+            <argument type="service" id="Nyholm\Psr7\Factory\Psr17Factory"/>
+            <argument type="service" id="Nyholm\Psr7\Factory\Psr17Factory"/>
+        </service>
+
+        <service id="Nyholm\Psr7\Factory\Psr17Factory"/>
+    </services>
+</container>

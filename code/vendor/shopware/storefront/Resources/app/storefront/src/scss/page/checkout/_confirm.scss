@@ -1,0 +1,43 @@
+.is-act-confirmpage {
+    .checkout {
+        padding-top: 70px;
+
+        .checkout-container {
+            @extend .row;
+        }
+
+        .checkout-main {
+            @extend .col-lg-8;
+            @extend .offset-lg-2;
+        }
+
+        .checkout-aside {
+            @extend .col;
+            @extend .col-md-6;
+            @extend .offset-md-6;
+            @extend .col-lg-4;
+        }
+    }
+}
+
+.confirm-main-header,
+.confirm-tos,
+.confirm-address,
+.confirm-payment-shipping,
+.confirm-payment,
+.confirm-product {
+    margin-bottom: $spacer-lg;
+}
+
+.confirm-payment-current,
+.confirm-shipping-current {
+    margin-bottom: $spacer-xl;
+
+    &.is-invalid {
+        color: $danger;
+    }
+}
+
+.confirm-method-tooltip {
+    margin-left: $spacer-xs;
+}

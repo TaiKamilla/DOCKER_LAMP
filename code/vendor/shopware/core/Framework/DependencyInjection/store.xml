@@ -1,0 +1,55 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <parameters>
+        <parameter key="instance_id">%env(INSTANCE_ID)%</parameter>
+    </parameters>
+    <services>
+        <service id="Shopware\Core\Framework\Store\Api\StoreController" public="true">
+            <argument type="service" id="Shopware\Core\Framework\Store\Services\StoreClient" />
+            <argument type="service" id="plugin.repository" />
+            <argument type="service" id="Shopware\Core\Framework\Plugin\PluginManagementService" />
+            <argument type="service" id="Shopware\Core\Framework\Plugin\PluginLifecycleService" />
+            <argument type="service" id="user.repository" />
+            <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
+            <argument type="service" id="Shopware\Core\Framework\DataAbstractionLayer\Search\RequestCriteriaBuilder"/>
+        </service>
+
+        <service id="Shopware\Core\Framework\Store\Api\FirstRunWizardController" public="true">
+            <argument type="service" id="Shopware\Core\Framework\Store\Services\FirstRunWizardClient"/>
+            <argument type="service" id="plugin.repository" />
+            <argument type="service" id="user.repository" />
+        </service>
+
+        <service id="Shopware\Core\Framework\Store\Services\StoreClient">
+            <argument type="service" id="Shopware\Core\Framework\Store\Services\StoreService" />
+            <argument type="service" id="plugin.repository"/>
+            <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
+        </service>
+
+        <service id="Shopware\Core\Framework\Store\Services\FirstRunWizardClient">
+            <argument type="service" id="Shopware\Core\Framework\Store\Services\StoreService"/>
+            <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
+            <argument type="service" id="shopware.filesystem.public"/>
+            <argument>%shopware.store.frw%</argument>
+            <argument type="service" id="event_dispatcher"/>
+
+        </service>
+
+        <service id="Shopware\Core\Framework\Store\Services\StoreService">
+            <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
+            <argument type="service" id="Shopware\Core\Framework\Store\Services\OpenSSLVerifier"/>
+            <argument>%kernel.shopware_version%</argument>
+            <argument>%instance_id%</argument>
+        </service>
+
+        <service id="Shopware\Core\Framework\Store\Services\OpenSSLVerifier">
+            <argument type="collection">
+                <argument>%kernel.project_dir%/vendor/shopware/platform/src/Core/Framework/Store/public.key</argument>
+                <argument>%kernel.project_dir%/vendor/shopware/core/Framework/Store/public.key</argument>
+            </argument>
+        </service>
+    </services>
+</container>

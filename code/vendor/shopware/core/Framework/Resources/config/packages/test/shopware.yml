@@ -1,0 +1,14 @@
+shopware:
+    filesystem:
+        private:
+            type: "memory"
+            config:
+                root: ~
+        public:
+            type: "memory"
+            config:
+                root: ~
+
+    admin_worker:
+        poll_interval: 1
+

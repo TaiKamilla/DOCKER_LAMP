@@ -1,0 +1,73 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <service id="Shopware\Core\Content\Cms\CmsPageDefinition">
+            <tag name="shopware.entity.definition" entity="cms_page"/>
+            <tag name="shopware.composite_search.definition" />
+        </service>
+
+        <service id="Shopware\Core\Content\Cms\Aggregate\CmsPageTranslation\CmsPageTranslationDefinition">
+            <tag name="shopware.entity.definition" entity="cms_page_translation"/>
+        </service>
+
+        <service id="Shopware\Core\Content\Cms\Aggregate\CmsSection\CmsSectionDefinition">
+            <tag name="shopware.entity.definition" entity="cms_section"/>
+        </service>
+
+        <service id="Shopware\Core\Content\Cms\Aggregate\CmsBlock\CmsBlockDefinition">
+            <tag name="shopware.entity.definition" entity="cms_block"/>
+        </service>
+
+        <service id="Shopware\Core\Content\Cms\Aggregate\CmsSlot\CmsSlotDefinition">
+            <tag name="shopware.entity.definition" entity="cms_slot"/>
+        </service>
+
+        <service id="Shopware\Core\Content\Cms\Aggregate\CmsSlotTranslation\CmsSlotTranslationDefinition">
+            <tag name="shopware.entity.definition" entity="cms_slot_translation"/>
+        </service>
+
+        <service id="Shopware\Core\Content\Cms\SalesChannel\SalesChannelCmsPageRepository" public="true">
+            <argument type="service" id="cms_page.repository" />
+        </service>
+
+        <service id="Shopware\Core\Content\Cms\DataResolver\CmsSlotsDataResolver" public="true">
+            <argument type="tagged" tag="shopware.cms.data_resolver"/>
+            <argument type="collection">
+                <argument type="service" key="product" id="sales_channel.product.repository" />
+            </argument>
+            <argument type="service" id="Shopware\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry"/>
+        </service>
+
+        <service id="Shopware\Core\Content\Cms\DataResolver\Element\TextCmsElementResolver">
+            <tag name="shopware.cms.data_resolver"/>
+        </service>
+
+        <service id="Shopware\Core\Content\Cms\DataResolver\Element\FormCmsElementResolver">
+            <tag name="shopware.cms.data_resolver"/>
+            <argument type="service" id="salutation.repository"/>
+        </service>
+
+        <service id="Shopware\Core\Content\Cms\SalesChannel\SalesChannelCmsPageController" public="true">
+            <argument type="service" id="Shopware\Core\Content\Cms\SalesChannel\SalesChannelCmsPageLoader"/>
+            <argument type="service" id="Shopware\Core\Content\Cms\CmsPageDefinition" />
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+        </service>
+
+        <service id="Shopware\Core\Content\Cms\DataAbstractionLayer\FieldSerializer\SlotConfigFieldSerializer">
+            <argument type="service" id="Shopware\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry" />
+            <argument type="service" id="validator" />
+            <tag name="shopware.field_serializer"/>
+        </service>
+
+        <service id="Shopware\Core\Content\Cms\SalesChannel\SalesChannelCmsPageLoader">
+            <argument type="service" id="cms_page.repository"/>
+            <argument type="service" id="Shopware\Core\Content\Cms\DataResolver\CmsSlotsDataResolver"/>
+            <argument type="service" id="event_dispatcher"/>
+        </service>
+    </services>
+</container>

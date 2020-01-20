@@ -1,0 +1,137 @@
+{
+  "sw-mail-template": {
+    "general": {
+      "mainMenuItemList": "Übersicht",
+      "mainMenuItemGeneral": "E-Mail-Vorlagen",
+      "placeholderSearchBar": "Durchsuchen aller E-Mail-Vorlagen",
+      "notificationTestMailErrorTitle": "Fehler",
+      "notificationTestMailSalesChannelErrorMessage": "Bitte wähle einen Verkaufskanal aus.",
+      "notificationTestMailErrorMessage": "Beim Versand der Test-Mail ist ein Fehler aufgetreten.",
+      "notificationTestMailSuccessTitle": "Erfolg",
+      "notificationTestMailSuccessMessage": "Die Test-Mail wurde erfolgreich versendet."
+    },
+    "list": {
+      "textMailTemplateOverview": "E-Mail-Vorlagen",
+      "titleMailTemplateList" : "Vorlagen",
+      "titleMailFooterList" : "Fußzeilen",
+      "buttonAddMailTemplate": "E-Mail-Vorlage hinzufügen",
+      "buttonAdd": "Erstellen",
+      "columnMailType": "Typ",
+      "columnDescription": "Beschreibung",
+      "columnSalesChannels": "Verkaufskanal",
+      "contextMenuDelete": "Löschen",
+      "contextMenuEdit": "Bearbeiten",
+      "contextMenuDuplicate": "Duplizieren",
+      "textDeleteConfirm": "Möchtest Du die E-Mail-Vorlage \"{subject}\" wirklich löschen?",
+      "modalTitleDelete": "E-Mail-Vorlage löschen",
+      "buttonCancel": "Abbrechen",
+      "buttonDelete": "Löschen",
+      "messageEmpty": "Noch keine E-Mail-Vorlagen",
+      "titleSidebarItemRefresh": "Aktualisieren",
+      "errorMediaItemDuplicated": "Medium bereits verwendet"
+    },
+    "detail": {
+      "basic": {
+        "titleCard": "Informationen",
+        "labelMailType": "Typ",
+        "labelDescription": "Beschreibung",
+        "labelSalesChannels": "Verkaufskanal",
+        "placeholderMailType": "Wähle einen Typ ...",
+        "placeholderDescription": "Gib eine kurze Beschreibung an ...",
+        "placeholderSalesChannels": "Wähle eine Zuweisung ..."
+      },
+      "options": {
+        "titleCard": "Optionen",
+        "labelSenderMail": "Absender-Mail",
+        "labelSenderName": "Absender",
+        "labelSubject": "Betreff",
+        "placeholderSenderMail": "shop@example.com",
+        "placeholderSenderName": "Beispiel-Shop",
+        "placeholderSubject": "Betreff eingeben ..."
+      },
+      "mailText": {
+        "titleCard": "Mail-Text",
+        "labelContentPlain": "Text",
+        "labelContentHtml": "HTML",
+        "placeholderPlain": "Definiere den Inhalt in Text ...",
+        "placeholderHtml": "Definiere den Inhalt in HTML ..."
+      },
+      "media": {
+        "titleCard": "Anhänge",
+        "buttonDelete": "Anhang löschen"
+      },
+      "sidebar": {
+        "labelContextMenuAddToMailTemplate": "Als Anhang hinzufügen",
+        "placeholderTestMail": "shop@example.com",
+        "buttonTestMail": "Senden",
+        "labelTestMail": "Empfänger-Adresse",
+        "titleTestMail": "Test-Mail senden"
+      },
+      "buttonCancel": "Abbrechen",
+      "buttonSave": "Speichern",
+      "textHeadline": "Neue E-Mail-Vorlage",
+      "textHeadlineEdit": "E-Mail-Vorlage bearbeiten",
+      "titleResult": "E-Mail-Vorlagen",
+      "titleSaveSuccess": "Erfolg",
+      "titleSaveError": "Fehler",
+      "messageSaveSuccess": "Die E-Mail-Vorlage \"{subject}\" wurde erfolgreich gespeichert.",
+      "messageSaveError": "Die E-Mail-Vorlage \"{subject}\" konnte nicht gespeichert werden."
+    }
+  },
+  "sw-mail-header-footer": {
+    "general": {
+      "mainMenuItemList": "Header & Footer",
+      "placeholderSearchBar": "Suche nach Header & Footer",
+      "mainMenuItemGeneral": "Header & Footer"
+    },
+    "list": {
+      "textMailHeaderFooterOverview": "Header & Footer",
+      "buttonAddMailHeaderFooter": "Header & Footer hinzufügen",
+      "columnName": "Name",
+      "columnDescription": "Beschreibung",
+      "columnSalesChannels": "Verkaufskanal",
+      "contextMenuDelete": "Löschen",
+      "contextMenuEdit": "Bearbeiten",
+      "contextMenuDuplicate": "Duplizieren",
+      "textDeleteConfirm": "Möchtest Du den E-Mail Header/Footer \"{name}\" wirklich löschen?",
+      "modalTitleDelete": "Header/Footer löschen",
+      "buttonCancel": "Abbrechen",
+      "buttonDelete": "Löschen",
+      "messageEmpty": "Noch keine Header/Footer",
+      "titleSidebarItemRefresh": "Aktualisieren"
+    },
+    "detail": {
+      "basic": {
+        "titleCard": "Informationen",
+        "labelName": "Name",
+        "labelDescription": "Beschreibung",
+        "labelSalesChannels": "Verkaufskanäle",
+        "placeholderName": "Gib einen Namen ein ...",
+        "placeholderDescription": "Gib eine Beschreibung ein ...",
+        "placeholderSalesChannels": "Wähle zutreffende Verkaufskanäle"
+      },
+      "header": {
+        "titleCard": "Mail-Header",
+        "labelPlain": "Text",
+        "labelHtml": "HTML",
+        "placeholderPlain": "Definiere den Header in Text ...",
+        "placeholderHtml": "Definiere den Header in HTML ..."
+      },
+      "footer": {
+        "titleCard": "Mail Footer",
+        "labelPlain": "Text",
+        "labelHtml": "HTML",
+        "placeholderPlain": "Definiere den Footer in Text ...",
+        "placeholderHtml": "Definiere den Footer in HTML ..."
+      },
+      "buttonCancel": "Abbrechen",
+      "buttonSave": "Speichern",
+      "textHeadline": "Neuer E-Mail-Header/Footer",
+      "titleResult": "E-Mail-Header/Footer",
+      "titleSaveSuccess": "Erfolgreich",
+      "titleSaveError": "Fehler",
+      "messageSaveSuccess": "Der E-Mail-Header/Footer \"{name}\" wurde erfolgreich gespeichert.",
+      "messageSaveError": "Der E-Mail-Header/Footer \"{name}\" konnte nicht gespeichert werden."
+    }
+  }
+}

@@ -1,0 +1,48 @@
+@import "~scss/variables";
+
+.sw-field {
+    width: 100%;
+    margin-bottom: 22px;
+
+    .sw-field__label {
+        display: flex;
+        line-height: 16px;
+        font-size: 14px;
+        margin-bottom: 8px;
+        color: $color-kashmir;
+
+        label {
+            flex-grow: 1;
+        }
+    }
+
+    .sw-field__label .is--required::after{
+        content: "*";
+        color: $color-shopware-blue
+    }
+
+    .sw-field__inheritance-icon {
+        margin-right: 8px;
+    }
+
+    .sw-field__button-restore {
+        color: $color-kashmir;
+        padding: 0 8px;
+        border: none;
+        background: none;
+        outline: none;
+        -moz-appearance: none;
+        -webkit-appearance: none;
+        cursor: pointer;
+    }
+
+    .sw-field__help-text {
+        align-self: center;
+    }
+
+    &.is--inherited {
+        .sw-field__label {
+            color: $color-purple;
+        }
+    }
+}

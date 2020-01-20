@@ -1,0 +1,24 @@
+{
+  "sw-settings-units": {
+    "general": {
+      "mainMenuItemGeneral": "Scale units",
+      "placeholderSearchBar": "Search scale units...",
+      "createNewUnit": "Create new scale unit"
+    },
+    "grid": {
+      "columnName": "Scale unit",
+      "columnShortCode": "Shorthand",
+      "contextMenuDelete": "Delete"
+    },
+    "empty-state": {
+      "title": "No scale units yet",
+      "subline": "Manage scale units here."
+    },
+    "notification": {
+      "successTitle": "Success",
+      "successMessage": "Scale unit has been saved.",
+      "errorTitle": "Error",
+      "errorMessage": "Scale unit could not be saved. Please fill in all required fields."
+    }
+  }
+}

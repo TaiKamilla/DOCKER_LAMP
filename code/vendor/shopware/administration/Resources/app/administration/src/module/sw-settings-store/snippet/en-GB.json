@@ -1,0 +1,18 @@
+{
+  "sw-settings-store": {
+    "general": {
+      "mainMenuItemGeneral": "Shopware Account",
+      "textHeadline": "Shopware Account",
+      "description": "Change your Shopware Account settings here.",
+      "buttonSave": "Save",
+      "titleSaveSuccess": "Success",
+      "messageSaveSuccess": "Your Shopware Account information have been saved.",
+      "titleSaveError": "Error"
+    },
+    "detail": {
+      "titleCard": "Settings",
+      "labelHost": "License domain",
+      "placeholderHost": "Enter the license domain (shop domain), specified in your Shopware Account."
+    }
+  }
+}

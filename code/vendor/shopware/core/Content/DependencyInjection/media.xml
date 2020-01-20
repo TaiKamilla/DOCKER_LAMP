@@ -1,0 +1,310 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <parameters>
+        <parameter type="collection" key="shopware.media.metadata.types">
+            <parameter type="string">\Shopware\Core\Content\Media\Metadata\Type\ImageMetadata</parameter>
+            <parameter type="string">\Shopware\Core\Content\Media\Metadata\Type\DocumentMetadata</parameter>
+            <parameter type="string">\Shopware\Core\Content\Media\Metadata\Type\VideoMetadata</parameter>
+        </parameter>
+    </parameters>
+    <services>
+        <!-- Entity definitions -->
+        <service id="Shopware\Core\Content\Media\MediaDefinition">
+            <tag name="shopware.entity.definition" entity="media"/>
+            <tag name="shopware.composite_search.definition" priority="400"/>
+        </service>
+
+        <service id="Shopware\Core\Content\Media\Aggregate\MediaDefaultFolder\MediaDefaultFolderDefinition">
+            <tag name="shopware.entity.definition" entity="media_default_folder"/>
+        </service>
+
+        <service id="Shopware\Core\Content\Media\Aggregate\MediaThumbnail\MediaThumbnailDefinition">
+            <tag name="shopware.entity.definition" entity="media_thumbnail"/>
+        </service>
+
+        <service id="Shopware\Core\Content\Media\Aggregate\MediaTranslation\MediaTranslationDefinition">
+            <tag name="shopware.entity.definition" entity="media_translation"/>
+        </service>
+
+        <service id="Shopware\Core\Content\Media\Aggregate\MediaFolder\MediaFolderDefinition">
+            <tag name="shopware.entity.definition" entity="media_folder"/>
+        </service>
+
+        <service id="Shopware\Core\Content\Media\Aggregate\MediaThumbnailSize\MediaThumbnailSizeDefinition">
+            <tag name="shopware.entity.definition" entity="media_thumbnail_size"/>
+        </service>
+
+        <service id="Shopware\Core\Content\Media\Aggregate\MediaFolderConfiguration\MediaFolderConfigurationDefinition">
+            <tag name="shopware.entity.definition" entity="media_folder_configuration"/>
+        </service>
+
+        <service id="Shopware\Core\Content\Media\Aggregate\MediaFolderConfigurationMediaThumbnailSize\MediaFolderConfigurationMediaThumbnailSizeDefinition">
+            <tag name="shopware.entity.definition" entity="media_folder_configuration_media_thumbnail_size"/>
+        </service>
+
+        <service id="Shopware\Core\Content\Media\Aggregate\MediaTag\MediaTagDefinition">
+            <tag name="shopware.entity.definition" entity="media_tag"/>
+        </service>
+        <!-- end of Entity definitions -->
+
+        <!-- message handlers -->
+        <service id="Shopware\Core\Content\Media\Message\GenerateThumbnailsHandler">
+            <argument type="service" id="Shopware\Core\Content\Media\Thumbnail\ThumbnailService"/>
+            <argument type="service" id="media.repository"/>
+
+            <tag name="messenger.message_handler"/>
+        </service>
+
+        <service id="Shopware\Core\Content\Media\Message\DeleteFileHandler">
+            <argument type="service" id="shopware.filesystem.public"/>
+
+            <tag name="messenger.message_handler"/>
+        </service>
+        <!-- end of message handlers -->
+
+        <service id="Shopware\Core\Content\Media\Subscriber\MediaLoadedSubscriber">
+            <argument type="service" id="Shopware\Core\Content\Media\Pathname\UrlGeneratorInterface"/>
+            <tag name="kernel.event_subscriber"/>
+        </service>
+
+        <service id="Shopware\Core\Content\Media\Subscriber\MediaFolderConfigLoadedSubscriber">
+            <tag name="kernel.event_subscriber"/>
+        </service>
+
+        <service id="Shopware\Core\Content\Media\DataAbstractionLayer\Indexing\MediaFolderConfigIndexer">
+            <argument type="service" id="Doctrine\DBAL\Connection"/>
+            <argument type="service" id="Shopware\Core\Framework\DataAbstractionLayer\Dbal\Common\IteratorFactory"/>
+            <argument type="service" id="media_folder.repository"/>
+            <argument type="service" id="Shopware\Core\Framework\DataAbstractionLayer\Cache\EntityCacheKeyGenerator"/>
+            <argument type="service" id="Shopware\Core\Framework\Adapter\Cache\CacheClearer"/>
+            <tag name="shopware.dal_indexing.indexer" priority="500"/>
+        </service>
+
+        <service id="Shopware\Core\Content\Media\DataAbstractionLayer\Indexing\MediaFolderSizeIndexer">
+            <argument type="service" id="Doctrine\DBAL\Connection"/>
+            <argument type="service" id="Shopware\Core\Framework\DataAbstractionLayer\Dbal\Common\IteratorFactory"/>
+            <argument type="service" id="media_folder_configuration.repository"/>
+            <argument type="service" id="Shopware\Core\Framework\DataAbstractionLayer\Cache\EntityCacheKeyGenerator"/>
+            <argument type="service" id="Shopware\Core\Framework\Adapter\Cache\CacheClearer"/>
+            <tag name="shopware.dal_indexing.indexer" priority="500"/>
+        </service>
+
+        <service id="Shopware\Core\Content\Media\DataAbstractionLayer\Indexing\MediaThumbnailIndexer">
+            <argument type="service" id="Doctrine\DBAL\Connection"/>
+            <argument type="service" id="Shopware\Core\Framework\DataAbstractionLayer\Dbal\Common\IteratorFactory"/>
+            <argument type="service" id="media.repository"/>
+            <argument type="service" id="Shopware\Core\Framework\DataAbstractionLayer\Cache\EntityCacheKeyGenerator"/>
+            <argument type="service" id="Shopware\Core\Framework\Adapter\Cache\CacheClearer"/>
+            <argument type="service" id="Shopware\Core\Content\Media\MediaDefinition"/>
+            <tag name="shopware.dal_indexing.indexer"/>
+            <tag name="kernel.event_subscriber"/>
+        </service>
+
+
+        <!--Repository Decorators-->
+
+        <service id="Shopware\Core\Content\Media\DataAbstractionLayer\MediaRepositoryDecorator" decorates="media.repository">
+            <argument type="service" id="Shopware\Core\Content\Media\DataAbstractionLayer\MediaRepositoryDecorator.inner"/>
+            <argument type="service" id="event_dispatcher"/>
+            <argument type="service" id="Shopware\Core\Content\Media\Pathname\UrlGeneratorInterface"/>
+            <argument type="service" id="media_thumbnail.repository"/>
+            <argument type="service" id="messenger.bus.shopware"/>
+        </service>
+
+        <service id="Shopware\Core\Content\Media\DataAbstractionLayer\MediaThumbnailRepositoryDecorator" decorates="media_thumbnail.repository">
+            <argument type="service" id="Shopware\Core\Content\Media\DataAbstractionLayer\MediaThumbnailRepositoryDecorator.inner"/>
+            <argument type="service" id="event_dispatcher"/>
+            <argument type="service" id="Shopware\Core\Content\Media\Pathname\UrlGeneratorInterface"/>
+            <argument type="service" id="messenger.bus.shopware"/>
+        </service>
+
+        <service id="Shopware\Core\Content\Media\DataAbstractionLayer\MediaFolderRepositoryDecorator" decorates="media_folder.repository">
+            <argument type="service" id="Shopware\Core\Content\Media\DataAbstractionLayer\MediaFolderRepositoryDecorator.inner"/>
+            <argument type="service" id="media.repository"/>
+        </service>
+
+        <!--File Services-->
+        <service id="Shopware\Core\Content\Media\File\FileFetcher">
+        </service>
+
+        <service id="Shopware\Core\Content\Media\File\FileSaver" public="true">
+            <argument type="service" id="media.repository"/>
+            <argument type="service" id="shopware.filesystem.public"/>
+            <argument type="service" id="shopware.filesystem.private"/>
+            <argument type="service" id="Shopware\Core\Content\Media\Pathname\UrlGeneratorInterface"/>
+            <argument type="service" id="Shopware\Core\Content\Media\Thumbnail\ThumbnailService"/>
+            <argument type="service" id="Shopware\Core\Content\Media\Metadata\MetadataLoader"/>
+            <argument type="service" id="Shopware\Core\Content\Media\TypeDetector\TypeDetector"/>
+            <argument type="service" id="messenger.bus.shopware" />
+        </service>
+
+        <service id="Shopware\Core\Content\Media\File\FileLoader">
+            <argument type="service" id="shopware.filesystem.public"/>
+            <argument type="service" id="shopware.filesystem.private"/>
+            <argument type="service" id="Shopware\Core\Content\Media\Pathname\UrlGeneratorInterface"/>
+            <argument type="service" id="media.repository"/>
+        </service>
+
+        <service id="Shopware\Core\Content\Media\File\FileNameProvider" class="Shopware\Core\Content\Media\File\WindowsStyleFileNameProvider">
+            <argument type="service" id="media.repository"/>
+        </service>
+
+
+        <!-- Commands -->
+        <service id="Shopware\Core\Content\Media\Commands\GenerateThumbnailsCommand">
+            <argument type="service" id="Shopware\Core\Content\Media\Thumbnail\ThumbnailService"/>
+            <argument type="service" id="media.repository"/>
+            <argument type="service" id="media_folder.repository"/>
+            <argument type="service" id="messenger.bus.shopware"/>
+
+            <tag name="console.command"/>
+        </service>
+
+        <service id="Shopware\Core\Content\Media\Commands\GenerateMediaTypesCommand">
+            <argument type="service" id="Shopware\Core\Content\Media\TypeDetector\TypeDetector"/>
+            <argument type="service" id="media.repository"/>
+
+            <tag name="console.command"/>
+        </service>
+
+        <service id="Shopware\Core\Content\Media\Commands\DeleteNotUsedMediaCommand">
+            <argument type="service" id="Shopware\Core\Content\Media\DeleteNotUsedMediaService"/>
+
+            <tag name="console.command"/>
+        </service>
+
+        <!-- Pathname -->
+        <service class="Shopware\Core\Content\Media\Pathname\UrlGenerator" id="Shopware\Core\Content\Media\Pathname\UrlGeneratorInterface">
+            <argument type="service" id="Shopware\Core\Content\Media\Pathname\PathnameStrategy\PathnameStrategyInterface"/>
+            <argument type="service" id="request_stack"/>
+            <argument>%shopware.cdn.url%</argument>
+        </service>
+
+        <service id="Shopware\Core\Content\Media\Pathname\PathnameStrategy\StrategyFactory">
+            <argument type="tagged" tag="shopware.pathname.strategy"/>
+        </service>
+
+        <service id="Shopware\Core\Content\Media\Pathname\PathnameStrategy\PathnameStrategyInterface">
+            <factory service="Shopware\Core\Content\Media\Pathname\PathnameStrategy\StrategyFactory" method="factory"/>
+            <argument>%shopware.cdn.strategy%</argument>
+        </service>
+
+        <service id="Shopware\Core\Content\Media\Pathname\PathnameStrategy\FilenamePathnameStrategy">
+            <argument type="service" id="Shopware\Core\Content\Media\Pathname\PathnameStrategy\PlainPathnameStrategy"/>
+
+            <tag name="shopware.pathname.strategy"/>
+        </service>
+
+        <service id="Shopware\Core\Content\Media\Pathname\PathnameStrategy\PhysicalFilenamePathnameStrategy">
+            <argument type="service" id="Shopware\Core\Content\Media\Pathname\PathnameStrategy\PlainPathnameStrategy"/>
+
+            <tag name="shopware.pathname.strategy"/>
+        </service>
+
+        <service id="Shopware\Core\Content\Media\Pathname\PathnameStrategy\PlainPathnameStrategy">
+            <tag name="shopware.pathname.strategy"/>
+        </service>
+
+        <service id="Shopware\Core\Content\Media\Pathname\PathnameStrategy\IdPathnameStrategy">
+            <argument type="service" id="Shopware\Core\Content\Media\Pathname\PathnameStrategy\PlainPathnameStrategy"/>
+
+            <tag name="shopware.pathname.strategy"/>
+        </service>
+
+        <!-- Controller -->
+        <service id="Shopware\Core\Content\Media\Api\MediaUploadController" public="true">
+            <argument type="service" id="Shopware\Core\Content\Media\MediaService"/>
+            <argument type="service" id="Shopware\Core\Content\Media\File\FileSaver"/>
+            <argument type="service" id="Shopware\Core\Content\Media\File\FileNameProvider"/>
+            <argument type="service" id="Shopware\Core\Content\Media\MediaDefinition"/>
+            <call method="setContainer">
+                <argument type="service" id="service_container"/>
+            </call>
+        </service>
+
+        <service id="Shopware\Core\Content\Media\Api\MediaFolderController" public="true">
+            <argument type="service" id="Shopware\Core\Content\Media\MediaFolderService"/>
+            <call method="setContainer">
+                <argument type="service" id="service_container"/>
+            </call>
+        </service>
+
+        <!-- Metadata -->
+        <service id="Shopware\Core\Content\Media\Metadata\MetadataLoader\ImageMetadataLoader">
+            <tag name="shopware.metadata.loader"/>
+        </service>
+
+        <service id="Shopware\Core\Content\Media\Metadata\MetadataLoader">
+            <argument type="tagged" tag="shopware.metadata.loader"/>
+        </service>
+
+        <!-- TypeDetector -->
+        <service id="Shopware\Core\Content\Media\TypeDetector\AudioTypeDetector">
+            <tag name="shopware.media_type.detector" priority="10"/>
+        </service>
+
+        <service id="Shopware\Core\Content\Media\TypeDetector\DefaultTypeDetector">
+            <tag name="shopware.media_type.detector" priority="0"/>
+        </service>
+
+        <service id="Shopware\Core\Content\Media\TypeDetector\DocumentTypeDetector">
+            <tag name="shopware.media_type.detector" priority="10"/>
+        </service>
+
+        <service id="Shopware\Core\Content\Media\TypeDetector\ImageTypeDetector">
+            <tag name="shopware.media_type.detector" priority="10"/>
+        </service>
+
+        <service id="Shopware\Core\Content\Media\TypeDetector\VideoTypeDetector">
+            <tag name="shopware.media_type.detector" priority="10"/>
+        </service>
+
+        <service id="Shopware\Core\Content\Media\TypeDetector\TypeDetector">
+            <argument type="tagged" tag="shopware.media_type.detector"/>
+        </service>
+
+        <!-- Services -->
+        <service id="Shopware\Core\Content\Media\DeleteNotUsedMediaService">
+            <argument type="service" id="media.repository"/>
+            <argument type="service" id="media_default_folder.repository"/>
+        </service>
+
+        <service id="Shopware\Core\Content\Media\MediaFolderService">
+            <argument type="service" id="media.repository"/>
+            <argument type="service" id="media_folder.repository"/>
+            <argument type="service" id="media_folder_configuration.repository"/>
+        </service>
+
+        <service id="Shopware\Core\Content\Media\Thumbnail\ThumbnailService">
+            <argument type="service" id="media.repository"/>
+            <argument type="service" id="media_thumbnail.repository"/>
+            <argument type="service" id="shopware.filesystem.public"/>
+            <argument type="service" id="shopware.filesystem.private"/>
+            <argument type="service" id="Shopware\Core\Content\Media\Pathname\UrlGeneratorInterface"/>
+            <argument type="service" id="media_folder.repository"/>
+        </service>
+
+        <service id="Shopware\Core\Content\Media\MediaService">
+            <argument type="service" id="media.repository"/>
+            <argument type="service" id="media_folder.repository"/>
+            <argument type="service" id="Shopware\Core\Content\Media\File\FileLoader"/>
+            <argument type="service" id="Shopware\Core\Content\Media\File\FileSaver"/>
+            <argument type="service" id="Shopware\Core\Content\Media\File\FileFetcher"/>
+        </service>
+
+        <service id="Shopware\Core\Content\Media\Cms\ImageCmsElementResolver">
+            <tag name="shopware.cms.data_resolver" />
+        </service>
+
+        <service id="Shopware\Core\Content\Media\Cms\Type\ImageSliderTypeDataResolver">
+            <tag name="shopware.cms.data_resolver" />
+        </service>
+
+        <service id="Shopware\Core\Content\Media\Cms\Type\ImageGalleryTypeDataResolver">
+            <tag name="shopware.cms.data_resolver" />
+        </service>
+    </services>
+</container>

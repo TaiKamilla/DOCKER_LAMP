@@ -1,0 +1,186 @@
+{% block sw_admin_menu %}
+    <aside class="sw-admin-menu"
+           :class="adminMenuClasses"
+           :aria-expanded="isExpanded ? 'true' : 'false'">
+
+        {% block sw_admin_menu_header %}
+            <div class="sw-admin-menu__header">
+
+                {% block sw_admin_menu_header_logo %}
+                    <div class="sw-admin-menu__header-logo" role="img"></div>
+                {% endblock %}
+
+                {% block sw_admin_menu_header_version %}
+                    <sw-version class="collapsible-text"></sw-version>
+                {% endblock %}
+            </div>
+        {% endblock %}
+
+        {% block sw_admin_menu_body_container %}
+            <div class="sw-admin-menu__body-container">
+
+                {% block sw_admin_menu_body %}
+                    <div class="sw-admin-menu__body" ref="swAdminMenuBody" :style="scrollbarOffsetStyle">
+                        {% block sw_admin_menu_navigation_main %}
+                            <nav class="sw-admin-menu__navigation">
+
+                                {% block sw_admin_menu_navigation_main_list %}
+                                    <ul class="sw-admin-menu__navigation-list">
+
+                                        {% block sw_admin_menu_navigation_main_items %}
+                                            <sw-admin-menu-item v-for="(entry, index) in mainMenuEntries"
+                                                                @menu-item-hover="openFlyout"
+                                                                @menu-item-click="openSubMenu"
+                                                                :sidebarExpanded="isExpanded"
+                                                                :entry="entry"
+                                                                :key="entry.id || entry.path"
+                                                                :class="['sw-admin-menu__item--' + entry.id, entry.label]">
+                                            </sw-admin-menu-item>
+                                        {% endblock %}
+                                    </ul>
+                                {% endblock %}
+                            </nav>
+                        {% endblock %}
+                    </div>
+                {% endblock %}
+            </div>
+        {% endblock %}
+
+        {% block sw_admin_menu_footer %}
+            <div class="sw-admin-menu__footer">
+
+                {% block sw_admin_menu_toggle_sidebar %}
+                    <button class="sw-admin-menu__toggle" @click="onToggleSidebar">
+
+                        {% block sw_admin_menu_toggle_sidebar_icon %}
+                            <sw-icon :name="sidebarCollapseIcon" small></sw-icon>
+                        {% endblock %}
+
+                        {% block sw_admin_menu_toggle_sidebar_text %}
+                            <span class="collapsible-text">{{ $tc('global.sw-admin-menu.linkMinimizeMenu') }}</span>
+                        {% endblock %}
+
+                    </button>
+                {% endblock %}
+
+                {% block sw_admin_menu_user_actions_toggle %}
+                    <div class="sw-admin-menu__user-actions-toggle"
+                         :class="{'is--active': isUserActionsActive}"
+                         @click="onToggleUserActions"
+                         @mouseenter="openUserActions">
+
+                            <sw-loader size="32px" v-if="isUserLoading"></sw-loader>
+
+                        {% block sw_admin_menu_user_actions_avatar %}
+                            <sw-avatar class="sw-admin-menu__avatar"
+                                       :imageUrl="avatarUrl"
+                                       :firstName="firstName"
+                                       :lastName="lastName">
+                            </sw-avatar>
+                        {% endblock %}
+
+                        {% block sw_admin_menu_user_actions_custom_fields %}
+                            <div class="sw-admin-menu__user-custom-fields collapsible-text">
+                                <div class="sw-admin-menu__user-name">{{ userName }}</div>
+                                <div class="sw-admin-menu__user-type">Administrator</div>
+
+                                {% block sw_admin_menu_user_actions_toggle_icon %}
+                                    <sw-icon :name="userActionsToggleIcon" class="sw-admin-menu__user-actions-indicator" small></sw-icon>
+                                {% endblock %}
+                            </div>
+                        {% endblock %}
+                    </div>
+                {% endblock %}
+
+                {% block sw_admin_menu_user_actions %}
+                    <div class="sw-admin-menu__user-actions"
+                         :class="{'is--active': isUserActionsActive}"
+                         @mouseleave="closeUserActions">
+
+                        {% block sw_admin_menu_user_actions_label %}
+                            <div v-if="!isExpanded" class="sw-admin-menu__user-actions-label">
+                                {{ userName }}
+                            </div>
+                        {% endblock %}
+
+                        {% block sw_admin_menu_user_actions_list %}
+                            <ul class="sw-admin-menu__navigation-list">
+
+                                {% block sw_admin_menu_user_actions_items %}
+
+                                    {% block sw_admin_menu_user_actions_items_keyboard_shortcuts_overview %}
+                                        <li class="sw-admin-menu__navigation-list-item">
+                                            <sw-shortcut-overview ref="swShortcutOverview"></sw-shortcut-overview>
+                                            <a href="#"
+                                               class="sw-admin-menu__navigation-link"
+                                               @click.prevent="openKeyboardShortcutOverview"
+                                               v-tooltip="{
+                                                   message: $tc('sw-shortcut-overview.iconTooltip', 0, { key: 'Shift + ?' }),
+                                                   appearance: 'light',
+                                                   position: 'right'
+                                               }">
+                                                <sw-icon class="sw-admin-menu__navigation-link-icon"
+                                                         name="default-device-keyboard"
+                                                         small>
+                                                </sw-icon>
+                                                {{ $tc('sw-shortcut-overview.title') }}
+                                            </a>
+                                        </li>
+                                    {% endblock %}
+
+                                    {% block sw_admin_menu_user_actions_items_logout_user %}
+                                        <li class="sw-admin-menu__navigation-list-item">
+                                            <a href="#" class="sw-admin-menu__navigation-link sw-admin-menu__logout-action" @click.prevent="onLogoutUser">
+                                                <sw-icon class="sw-admin-menu__navigation-link-icon"
+                                                         name="default-action-log-out"
+                                                         small>
+                                                </sw-icon>
+                                                {{ $tc('global.sw-admin-menu.linkLogout') }}
+                                            </a>
+                                        </li>
+                                    {% endblock %}
+                                {% endblock %}
+                            </ul>
+                        {% endblock %}
+
+                    </div>
+                {% endblock %}
+            </div>
+        {% endblock %}
+
+        {% block sw_admin_menu_flyout_transition %}
+            <transition name="flyout">
+                {% block sw_admin_menu_flyout %}
+                    <div v-if="flyoutEntries.length"
+                         class="sw-admin-menu__flyout"
+                         :style="flyoutStyle"
+                         @mouseleave="closeFlyout">
+
+                        {% block sw_admin_menu_flyout_label %}
+                            <div v-if="!isExpanded" class="sw-admin-menu__flyout-label" :style="{'border-color': flyoutColor}">
+                                {{ $tc(flyoutLabel) }}
+                            </div>
+                        {% endblock %}
+
+                        {% block sw_admin_menu_flyout_list %}
+                            <ul v-if="flyoutEntries" class="sw-admin-menu__flyout-list">
+                                <sw-admin-menu-item v-for="(entry, index) in flyoutEntries"
+                                                    class="sw-admin-menu__flyout-item"
+                                                    :class="[getMenuItemClass(entry)]"
+                                                    :style="{'border-color': flyoutColor}"
+                                                    :entry="entry"
+                                                    :parentEntries="flyoutEntries"
+                                                    :key="entry.id || entry.path"
+                                                    :collapsibleText="false"
+                                                    :displayIcon="false"
+                                                    @menu-item-click="closeFlyout"
+                                                    @menu-item-hover="openFlyout">
+                                </sw-admin-menu-item>
+                            </ul>
+                        {% endblock %}
+                    </div>
+                {% endblock %}
+            </transition>
+        {% endblock %}
+    </aside>
+{% endblock %}

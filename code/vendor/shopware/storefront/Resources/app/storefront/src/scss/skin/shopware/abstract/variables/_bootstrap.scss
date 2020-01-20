@@ -1,0 +1,118 @@
+/*
+Bootstrap variables
+==================================================
+Contains all overrides of bootstrap default variables.
+
+https://getbootstrap.com/docs/4.3/getting-started/theming/#variable-defaults
+*/
+
+// Color system
+$gray-100: #f9f9f9;
+$gray-200: #eee;
+$gray-300: #bcc1c7;
+$gray-600: #798490;
+$gray-800: #4a545b;
+
+$primary: $sw-color-brand-primary;
+$secondary: $sw-color-brand-secondary;
+
+$success: $sw-color-success;
+$info: $sw-color-info;
+$warning: $sw-color-warning;
+$danger: $sw-color-danger;
+
+$light: $gray-100;
+$dark: $gray-800;
+
+$headings-color: $sw-headline-color;
+
+// Grid
+$grid-gutter-width: 40px;
+
+// Body
+$body-bg: $sw-background-color;
+$body-color: $sw-text-color;
+
+// Components
+$border-color: $sw-border-color;
+
+$border-radius: 3px;
+$border-radius-lg: 3px;
+$border-radius-sm: 3px;
+
+// Typography
+$font-family-base: $sw-font-family-base;
+
+$font-size-base: 0.875rem;
+$font-size-lg: 1rem;
+$font-size-sm: 0.75rem;
+$font-weight-normal: 400;
+
+$h1-font-size: 36px;
+$h2-font-size: 28px;
+$h3-font-size: 24px;
+$h4-font-size: 20px;
+$h5-font-size: 16px;
+$h6-font-size: 14px;
+
+$headings-font-weight: 700;
+$headings-font-family: $sw-font-family-headline;
+
+// Buttons + Forms
+$input-btn-padding-y: 0.5625rem;
+$input-btn-padding-x: 0.5625rem;
+
+$input-placeholder-color: #c3c3c3;
+
+// Buttons
+$btn-padding-y: 2px;
+$btn-padding-x: 12px;
+$btn-line-height: 34px;
+
+$btn-padding-y-sm: 2px;
+$btn-padding-x-sm: 12px;
+$btn-font-size-sm: 14px;
+$btn-line-height-sm: 30px;
+
+$btn-padding-y-lg: 2px;
+$btn-padding-x-lg: 12px;
+$btn-font-size-lg: 16px;
+$btn-line-height-lg: 38px;
+
+// Forms
+$enable-validation-icons: false;
+$input-color: $sw-text-color;
+$input-border-color: $sw-border-color;
+$input-focus-border-color: $sw-color-brand-primary;
+$custom-select-indicator-color: $input-color;
+$custom-control-indicator-active-bg: $sw-color-brand-primary;
+
+// Pagination
+$pagination-border-color: $sw-border-color;
+$pagination-hover-border-color: $sw-border-color;
+$pagination-focus-border-color: $sw-border-color;
+
+// Dropdown
+$dropdown-border-color: $sw-border-color;
+
+// Badges
+$badge-font-size: 12px;
+
+// Spinners
+$spinner-width: 26px;
+$spinner-border-width: 2px;
+
+// Modals
+$modal-header-padding-y: 10px;
+$modal-header-padding-x: 10px;
+
+// Breadcrumb
+$breadcrumb-bg: transparent;
+$breadcrumb-border-radius: 0;
+
+// Cards
+$card-border-color: transparent;
+$card-bg: transparent;
+
+// Tables
+$table-accent-bg: #f9f9f9;

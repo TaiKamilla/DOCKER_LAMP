@@ -1,0 +1,9 @@
+{% sw_extends '@Framework/documents/base.html.twig' %}
+
+{% block document_title_tag %}
+    {% trans with {'%creditNoteNumber%': config.custom.creditNoteNumber} %}document.creditNoteNumber{% endtrans %}
+{% endblock %}
+
+{% block document_headline %}
+    <h1>{% trans with {'%creditNoteNumber%': config.custom.creditNoteNumber, '%invoiceNumber%': config.custom.invoiceNumber}  %}document.creditNoteHeadline{% endtrans %}</h1>
+{% endblock %}

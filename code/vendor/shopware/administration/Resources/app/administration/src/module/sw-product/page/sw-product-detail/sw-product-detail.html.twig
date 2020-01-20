@@ -1,0 +1,126 @@
+{% block sw_product_detail %}
+    <sw-page class="sw-product-detail">
+
+        {% block sw_product_detail_header %}
+            <template slot="smart-bar-header">
+                <h2>{{ productTitle }}</h2>
+            </template>
+        {% endblock %}
+
+        {% block sw_product_detail_actions %}
+            <template slot="smart-bar-actions">
+                {% block sw_product_detail_actions_abort %}
+                    <sw-button :disabled="isLoading" v-tooltip.bottom="tooltipCancel" @click="onCancel">
+                        {{ $tc('sw-product.detail.buttonCancel') }}
+                    </sw-button>
+                {% endblock %}
+
+                {% block sw_product_detail_actions_save %}
+                    <sw-button-process
+                        class="sw-product-detail__save-action"
+                        :isLoading="isLoading"
+                        :processSuccess="isSaveSuccessful"
+                        :disabled="isLoading"
+                        variant="primary"
+                        @process-finish="saveFinish"
+                        v-tooltip.bottom="tooltipSave"
+                        @click.prevent="onSave">
+                        {{ $tc('sw-product.detail.buttonSave') }}
+                    </sw-button-process>
+                {% endblock %}
+            </template>
+        {% endblock %}
+
+        {% block sw_product_detail_language_switch %}
+            <template slot="language-switch">
+                <sw-language-switch
+                    @on-change="onChangeLanguage"
+                    :saveChangesFunction="saveOnLanguageChange"
+                    :abortChangeFunction="abortOnLanguageChange"
+                    :disabled="!productId">
+                </sw-language-switch>
+            </template>
+        {% endblock %}
+
+        {% block sw_product_detail_content %}
+            <sw-card-view slot="content">
+
+                {% block sw_product_detail_content_language_info %}
+                    <sw-language-info
+                            :entityDescription="placeholder(product, 'name', $tc('sw-product.detail.textHeadline'))"
+                            :isNewEntity="!productId">
+                    </sw-language-info>
+                {% endblock %}
+
+                {% block sw_product_detail_inheritance_warning %}
+                    <sw-inheritance-warning v-if="isChild" :name="$tc('sw-product.general.inheritanceModuleName')"></sw-inheritance-warning>
+                {% endblock %}
+
+                {% block sw_product_detail_content_tabs %}
+                    <sw-tabs class="sw-product-detail-page__tabs" v-if="productId">
+                        {% block sw_product_detail_content_tabs_general %}
+                            <sw-tabs-item class="sw-product-detail__tab-general"
+                                          :route="{ name: 'sw.product.detail.base', params: { id: $route.params.id } }"
+                                          :hasError="swProductDetailBaseError"
+                                          :title="$tc('sw-product.detail.tabGeneral')">
+                                {{ $tc('sw-product.detail.tabGeneral') }}
+                            </sw-tabs-item>
+                        {% endblock %}
+
+                        {% block sw_product_detail_content_tabs_advanced_prices %}
+                            <sw-tabs-item class="sw-product-detail__tab-advanced-prices"
+                                          :route="{ name: 'sw.product.detail.prices', params: { id: $route.params.id } }"
+                                          :title="$tc('sw-product.detail.tabAdvancedPrices')">
+                                {{ $tc('sw-product.detail.tabAdvancedPrices') }}
+                            </sw-tabs-item>
+                        {% endblock %}
+
+                        {% block sw_product_detail_content_tabs_advanced_properties %}
+                            <sw-tabs-item class="sw-product-detail__tab-properties"
+                                          :route="{ name: 'sw.product.detail.properties', params: { id: $route.params.id } }"
+                                          :title="$tc('sw-product.detail.tabProperties')">
+                                {{ $tc('sw-product.detail.tabProperties') }}
+                            </sw-tabs-item>
+                        {% endblock %}
+
+                        {% block sw_product_detail_content_tabs_advanced_variants %}
+                            <sw-tabs-item class="sw-product-detail__tab-variants"
+                                          v-if="!isChild"
+                                          :route="{ name: 'sw.product.detail.variants', params: { id: $route.params.id } }"
+                                          :title="$tc('sw-product.detail.tabVariation')">
+                                {{ $tc('sw-product.detail.tabVariation') }}
+                            </sw-tabs-item>
+                        {% endblock %}
+
+                        {% block sw_product_detail_content_tabs_cross_selling %}
+                            <sw-tabs-item
+                                v-if="!isChild"
+                                class="sw-product-detail__tab-cross-selling"
+                                :route="{ name: 'sw.product.detail.crossSelling', params: { id: $route.params.id } }"
+                                :title="$tc('sw-product.detail.tabCrossSelling')">
+                                {{ $tc('sw-product.detail.tabCrossSelling') }}
+                            </sw-tabs-item>
+                        {% endblock %}
+                    </sw-tabs>
+                {% endblock %}
+
+                {% block sw_product_detail_content_view %}
+                    <router-view @media-drop="onAddItemToProduct" @cover-change="onCoverChange"></router-view>
+                {% endblock %}
+            </sw-card-view>
+        {% endblock %}
+
+        <template slot="sidebar">
+            <sw-sidebar :propagateWidth="true">
+                <sw-sidebar-media-item ref="mediaSidebarItem">
+                    <template slot="context-menu-items" slot-scope="media">
+                        <sw-context-menu-item @click="onAddItemToProduct(media.mediaItem)">
+                            {{ $tc('sw-product.detailBase.labelContextMenuAddToProduct') }}
+                        </sw-context-menu-item>
+                    </template>
+                </sw-sidebar-media-item>
+            </sw-sidebar>
+        </template>
+
+    </sw-page>
+{% endblock %}

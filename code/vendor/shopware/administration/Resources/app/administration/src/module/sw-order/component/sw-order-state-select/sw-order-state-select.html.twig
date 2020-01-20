@@ -1,0 +1,13 @@
+{% block sw_order_state_select %}
+    <div class="sw-order-state-select">
+        {% block sw_order_state_select_field %}
+            <sw-field :class="`${selectStyle} ${backgroundStyle}`"
+                      type="select"
+                      :placeholder="selectPlaceholder"
+                      :options="transitionOptions"
+                      size="small"
+                      v-model="selectedActionName">
+            </sw-field>
+        {% endblock %}
+    </div>
+{% endblock %}

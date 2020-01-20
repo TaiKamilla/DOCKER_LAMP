@@ -1,0 +1,47 @@
+version: '2'
+
+networks:
+    LAMP:
+
+services:
+    web:
+        image: shopware
+        container_name: shopware
+        build: .
+        ports:
+            - "80:80"
+        volumes:
+            - ./code:/var/www/html
+        networks:
+            - LAMP
+
+        # for debugging
+        #entrypoint: ["sh", "-c", "sleep infinity"]
+        # entrypoint: ["sh", "-c", "sleep 2073600"]
+
+
+    mariaDB:
+        image: mariadb:10.4.10-bionic
+        container_name: LAMP_mariaDB
+        volumes:
+            - ./database:/var/lib/mysql:rw
+        ports:
+            - "3306:3306"
+        depends_on:
+            - web
+        environment:
+            - MYSQL_ROOT_PASSWORD=shopware          
+        networks:
+            - LAMP
+
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin
+        container_name: LAMP_phpMyAdmin
+        ports:
+            - "8183:80"
+        environment:        
+            PMA_ARBITRARY: 1
+        depends_on:
+            - mariaDB
+        networks:
+            - LAMP

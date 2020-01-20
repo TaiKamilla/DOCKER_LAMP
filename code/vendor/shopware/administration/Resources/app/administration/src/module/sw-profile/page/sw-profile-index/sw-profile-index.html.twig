@@ -1,0 +1,156 @@
+{% block sw_profile_index %}
+    <sw-page class="sw-profile-index">
+
+        <template #smart-bar-header>
+            {% block sw_profile_index_headline %}
+                <h2>{{ $tc('sw-profile.general.headlineProfile') }}</h2>
+            {% endblock %}
+        </template>
+
+        <template #smart-bar-actions>
+            {% block sw_profile_index_actions %}
+                <sw-button-process
+                    class="sw-profile__save-action"
+                    variant="primary"
+                    :isLoading="isLoading || isUserLoading"
+                    :processSuccess="isSaveSuccessful"
+                    :disabled="isLoading || isUserLoading"
+                    @process-finish="saveFinish"
+                    @click.prevent="onSave">
+                    {{ $tc('sw-profile.index.buttonSaveLabel') }}
+                </sw-button-process>
+            {% endblock %}
+        </template>
+
+        <template #content>
+            <sw-card-view>
+                {% block sw_profile_index_content %}
+                    {% block sw_profile_index_info_card %}
+                        <sw-card class="sw-profile__card"
+                                 :title="$tc('sw-profile.index.titleInfoCard')"
+                                 :isLoading="isUserLoading || !languageId">
+                            <sw-container columns="repeat(auto-fit, minmax(250px, 1fr)" gap="0 30px">
+                                {% block sw_profile_index_info_card_first_name_field %}
+                                    <sw-text-field v-model="user.firstName"
+                                                   :label="$tc('sw-profile.index.labelFirstNameField')"
+                                                   :disabled="isDisabled">
+                                    </sw-text-field>
+                                {% endblock %}
+
+                                {% block sw_profile_index_info_card_last_name_field %}
+                                    <sw-text-field v-model="user.lastName"
+                                                   :label="$tc('sw-profile.index.labelLastNameField')"
+                                                   :disabled="isDisabled">
+                                    </sw-text-field>
+                                {% endblock %}
+                            </sw-container>
+
+                            <sw-container columns="repeat(auto-fit, minmax(250px, 1fr)" gap="0 30px">
+                                {% block sw_profile_index_info_card_username_field %}
+                                    <sw-text-field v-model="user.username"
+                                                   :label="$tc('sw-profile.index.labelUsernameField')"
+                                                   :disabled="isDisabled">
+                                    </sw-text-field>
+                                {% endblock %}
+
+                                {% block sw_profile_index_info_card_language %}
+                                    <sw-select-field
+                                        v-model="user.localeId"
+                                        class="sw-profile__language"
+                                        :label="$tc('sw-settings-user.user-detail.labelLanguage')"
+                                        :placeholder="$tc('sw-settings-user.user-detail.labelLanguagePlaceholder')">
+                                        <option v-for="language in languages"
+                                                :value="language.locale.id"
+                                                :selected="user.localeId === language.locale.id">
+                                            {{ language.customLabel }}
+                                        </option>
+                                    </sw-select-field>
+                                {% endblock %}
+                            </sw-container>
+
+                            {% block sw_profile_index_info_card_email_field %}
+                                <sw-text-field v-model="user.email"
+                                               validation="email"
+                                               :label="$tc('sw-profile.index.labelEmailField')">
+                                </sw-text-field>
+                            {% endblock %}
+                        </sw-card>
+                    {% endblock %}
+
+                    {% block sw_profile_index_image_card %}
+                        <sw-card class="sw-profile__card"
+                                 :title="$tc('sw-profile.index.titleImageCard')"
+                                 :isLoading="isUserLoading || !languageId">
+                            {% block sw_profile_index_image_card_image %}
+                                <sw-upload-store-listener
+                                    :uploadTag="uploadTag"
+                                    autoUpload
+                                    @media-upload-finish="setMediaItem">
+                                </sw-upload-store-listener>
+                                <sw-media-upload
+                                    variant="regular"
+                                    class="sw-profile-index__user-image-upload"
+                                    :uploadTag="uploadTag"
+                                    :source="avatarMediaItem"
+                                    :allowMultiSelect="false"
+                                    :label="$tc('sw-profile.index.labelUploadAvatar')"
+                                    :defaultFolder="userRepository.schema.entity"
+                                    @media-drop="onDropMedia"
+                                    @media-upload-sidebar-open="openMediaSidebar"
+                                    @media-upload-remove-image="onUnlinkAvatar">
+                                </sw-media-upload>
+                            {% endblock %}
+                        </sw-card>
+                    {% endblock %}
+
+                    {% block sw_profile_index_password_card %}
+                        <sw-card class="sw-profile__card"
+                                 :title="$tc('sw-profile.index.titlePasswordCard')"
+                                 :isLoading="isUserLoading || !languageId">
+                            {% block sw_profile_index_password_card_old_password_field %}
+                                <sw-password-field v-model="oldPassword"
+                                                   autocomplete="off"
+                                                   :label="$tc('sw-profile.index.labelOldPassword')"
+                                                   :placeholder="$tc('sw-profile.index.placeholderOldPassword')">
+                                </sw-password-field>
+                            {% endblock %}
+
+                            {% block sw_profile_index_password_card_new_password_field %}
+                                <sw-password-field v-model="newPassword"
+                                                   autocomplete="off"
+                                                   :label="$tc('sw-profile.index.labelNewPassword')"
+                                                   :placeholder="$tc('sw-profile.index.placeholderNewPassword')">
+                                </sw-password-field>
+                            {% endblock %}
+
+                            {% block sw_profile_index_password_card_confirm_new_password_field %}
+                                <sw-password-field v-model="newPasswordConfirm"
+                                                   autocomplete="off"
+                                                   :label="$tc('sw-profile.index.labelNewPasswordConfirm')"
+                                                   :placeholder="$tc('sw-profile.index.placeholderNewPasswordConfirm')"
+                                                   :validation="newPassword === newPasswordConfirm">
+                                </sw-password-field>
+                            {% endblock %}
+                        </sw-card>
+                    {% endblock %}
+                {% endblock %}
+            </sw-card-view>
+        </template>
+
+        {% block sw_profile_index_sidebar %}
+            <template #sidebar>
+                <sw-sidebar :propagateWidth="true" >
+                    <sw-sidebar-media-item ref="mediaSidebarItem"
+                                           :isParentLoading="isUserLoading"
+                                           :additionalSearchCriteria="userMediaCriteria">
+                        <template #context-menu-items="media">
+                            <sw-context-menu-item @click="setMediaFromSidebar(media.mediaItem)">
+                                {{ $tc('sw-profile.index.labelUseAsAvatar') }}
+                            </sw-context-menu-item>
+                        </template>
+                    </sw-sidebar-media-item>
+                </sw-sidebar>
+            </template>
+        {% endblock %}
+    </sw-page>
+{% endblock %}

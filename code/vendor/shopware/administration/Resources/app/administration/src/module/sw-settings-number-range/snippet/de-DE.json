@@ -1,0 +1,59 @@
+{
+  "sw-settings-number-range": {
+    "general": {
+      "mainMenuItemGeneral": "Nummernkreise",
+      "placeholderSearchBar": "Nummernkreise durchsuchen"
+    },
+    "list": {
+      "textHeadline": "Nummernkreise",
+      "textDeleteConfirm": "Bist Du sicher, dass Du den Nummernkreis \"{name}\" löschen möchtest?",
+      "columnName": "Name",
+      "columnUsedIn": "Typ",
+      "columnAssignment": "Zuweisung",
+      "buttonAddNumberRange": "Nummernkreis anlegen",
+      "contextMenuEdit": "Bearbeiten",
+      "contextMenuDelete": "Löschen",
+      "modalTitleDelete": "Nummernkreis löschen",
+      "titleDeleteSuccess": "Erfolg",
+      "messageDeleteSuccess": "Der Nummernkreis \"{name}\" wurde erfolgreich gelöscht.",
+      "buttonCancel": "Abbrechen",
+      "buttonDelete": "Löschen",
+      "global": "Global"
+    },
+    "detail": {
+      "textHeadline": "Neuer Nummernkreis",
+      "configCard": "Einstellungen",
+      "assignmentCard": "Zuweisung",
+      "titleSaveSuccess": "Erfolg",
+      "messageSaveSuccess": "Der Nummernkreis \"{name}\" wurde erfolgreich gespeichert.",
+      "titleSaveError": "Fehler",
+      "messageSaveError": "Der Nummernkreis \"{name}\" wurde nicht erfolgreich gespeichert.",
+      "labelName": "Name",
+      "labelDescription": "Beschreibung",
+      "labelPrefix": "Präfix",
+      "labelSuffix": "Suffix",
+      "labelPattern": "Pattern",
+      "labelStart": "Startnummer",
+      "labelCurrentNumber": "Aktuelle Nummer",
+      "labelPreview": "Vorschau",
+      "labelAdvanced": "Erweiterter Modus",
+      "labelType": "Typ",
+      "labelSalesChannel": "Verkaufskanal",
+      "placeholderName": "Namen eingeben ...",
+      "placeholderDescription": "Beschreibung eingeben ...",
+      "placeholderPrefix": "Präfix eingeben ...",
+      "placeholderSuffix": "Suffix eingeben ...",
+      "placeholderPattern": "Pattern eingeben ... \"prefix_{n}_suffix\"",
+      "placeholderStart": "Startnummer eingeben ...",
+      "placeholderPleaseSelect": "Bitte wählen ...",
+      "placeholderSimpleModeImpossible": "Erweiterter Modus aktiv",
+      "buttonCancel": "Abbrechen",
+      "buttonSave": "Speichern",
+      "helpTextAdvancedField": "Erweiterte Pattern-Definition: <br/>&#x007B;Präfix&#x007D;_&#x007B;n&#x007D_&#x007B;Suffix&#x007D;<br/>'n' entspricht der definierten Startnummer<br/>('_' ist ein beliebiges Trennzeichen)<br/><br/>Verwendung von 'date' (PHP-Parameter): <br/>&#x007B;date&#x007D;:<br/>Internationales Datums-Format (YYYY-MM-DD)<br/>&#x007B;date_dmy&#x007D;:<br/>Benutzerdefiniertes Datums-Format (DD-MM-YY)<br/><br/>usw.",
+      "errorSalesChannelNeededTitle": "Kein Verkaufskanal ausgewählt!",
+      "errorSalesChannelNeededMessage": "Bitte wähle mindestens einen Verkaufskanal.",
+      "errorPatternNeededTitle": "Kein Pattern eingegeben!",
+      "errorPatternNeededMessage": "Bitte gib mindestens eine Startnummer an."
+    }
+  }
+}

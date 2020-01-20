@@ -1,0 +1,56 @@
+.is-act-finishpage {
+    .checkout {
+        padding-top: 70px;
+
+        .checkout-container {
+            @extend .row;
+        }
+
+        .checkout-main {
+            @extend .offset-lg-2;
+            @extend .col-lg-8;
+        }
+
+        .checkout-aside {
+            @extend .offset-sm-5;
+            @extend .col-sm-7;
+            @extend .offset-md-6;
+            @extend .col-md-6;
+            @extend .offset-lg-6;
+            @extend .col-lg-4;
+        }
+    }
+}
+
+.finish-content {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.finish-ordernumber {
+    font-size: $font-size-lg;
+    font-weight: $headings-font-weight;
+}
+
+.finish-teaser {
+    margin-bottom: $spacer;
+    text-align: center;
+}
+
+.finish-header {
+    margin-bottom: $spacer-lg;
+    text-align: center;
+}
+
+.finish-ordernumber {
+    text-align: center;
+}
+
+.finish-action {
+    margin-bottom: $spacer-lg;
+    text-align: center;
+}
+
+.finish-back-button {
+    margin-right: $spacer-sm;
+}

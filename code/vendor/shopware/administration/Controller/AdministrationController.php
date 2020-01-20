@@ -1,0 +1,74 @@
+<?php declare(strict_types=1);
+
+namespace Shopware\Administration\Controller;
+
+use Shopware\Administration\Snippet\SnippetFinderInterface;
+use Shopware\Core\Defaults;
+use Shopware\Core\Framework\Adapter\Twig\TemplateFinder;
+use Shopware\Core\Framework\FeatureFlag\FeatureConfig;
+use Shopware\Core\Framework\Routing\Annotation\RouteScope;
+use Shopware\Core\Framework\Store\Services\FirstRunWizardClient;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
+
+class AdministrationController extends AbstractController
+{
+    /**
+     * @var TemplateFinder
+     */
+    private $finder;
+
+    /**
+     * @var FirstRunWizardClient
+     */
+    private $firstRunWizardClient;
+
+    /**
+     * @var SnippetFinderInterface
+     */
+    private $snippetFinder;
+
+    public function __construct(TemplateFinder $finder, FirstRunWizardClient $firstRunWizardClient, SnippetFinderInterface $snippetFinder)
+    {
+        $this->finder = $finder;
+        $this->firstRunWizardClient = $firstRunWizardClient;
+        $this->snippetFinder = $snippetFinder;
+    }
+
+    /**
+     * @RouteScope(scopes={"administration"})
+     * @Route("/admin", defaults={"auth_required"=false}, name="administration.index", methods={"GET"})
+     */
+    public function index(): Response
+    {
+        $template = $this->finder->find('@Administration/administration/index.html.twig');
+
+        return $this->render($template, [
+            'features' => FeatureConfig::getAll(),
+            'systemLanguageId' => Defaults::LANGUAGE_SYSTEM,
+            'defaultLanguageIds' => [Defaults::LANGUAGE_SYSTEM],
+            'systemCurrencyId' => Defaults::CURRENCY,
+            'liveVersionId' => Defaults::LIVE_VERSION,
+            'firstRunWizard' => $this->firstRunWizardClient->frwShouldRun(),
+        ]);
+    }
+
+    /**
+     * @RouteScope(scopes={"administration"})
+     * @Route("/api/v{version}/_admin/snippets", name="api.admin.snippets", methods={"GET"})
+     */
+    public function snippets(Request $request): Response
+    {
+        $locale = $request->query->get('locale', 'en-GB');
+        $snippets[$locale] = $this->snippetFinder->findSnippets($locale);
+
+        if ($locale !== 'en-GB') {
+            $snippets['en-GB'] = $this->snippetFinder->findSnippets('en-GB');
+        }
+
+        return new JsonResponse($snippets);
+    }
+}

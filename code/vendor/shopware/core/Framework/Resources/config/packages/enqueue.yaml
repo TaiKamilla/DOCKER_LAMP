@@ -1,0 +1,6 @@
+enqueue:
+    default:
+        transport:
+            dsn: "null:"
+            factory_service: Shopware\Core\Framework\MessageQueue\Enqueue\ConnectionFactoryFactory
+        client: ~

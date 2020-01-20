@@ -1,0 +1,17 @@
+{% sw_extends '@Framework/documents/base.html.twig' %}
+
+{% block document_title_tag %}
+    {% trans with {'%deliveryNoteNumber%': config.custom.deliveryNoteNumber, '%orderNumber%':  order.orderNumber} %}document.deliveryNoteHeadline{% endtrans %}
+{% endblock %}
+
+{% block document_headline %}
+    <h1>{% trans with {'%deliveryNoteNumber%': config.custom.deliveryNoteNumber, '%orderNumber%': order.orderNumber} %}document.deliveryNoteHeadline{% endtrans %}</h1>
+{% endblock %}
+
+{% block document_side_info_contents %}
+    {{ parent() }}
+    <tr><td>{% trans with {'%deliveryDate%': config.custom.deliveryDate|format_date('medium', locale=order.saleschannel.language.locale.code)} %}document.deliveryDate{% endtrans %}</td></tr>
+{% endblock %}
+
+{% block document_sum %}
+{% endblock %}

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/shopware/platform/master/src/Core/System/SystemConfig/Schema/config.xsd">
+    <card>
+        <title>Listing</title>
+        <title lang="de-DE">Produktliste</title>
+
+        <input-field type="bool">
+            <name>allowBuyInListing</name>
+            <label>show buy button in listing</label>
+            <label lang="de-DE">Kaufen-Button im Produktlisting anzeigen</label>
+        </input-field>
+
+        <input-field type="int">
+            <name>markAsNew</name>
+            <label>mark products as new</label>
+            <label lang="de-DE">Produkte als neu markieren</label>
+            <description>Products are marked as new if their release date is within the specified period (given in days)</description>
+            <description lang="de-DE">Produkte werden als neu markiert, wenn deren Erscheinungsdatum im angegebenen Zeitraum liegt (angegeben in Tagen)</description>
+        </input-field>
+    </card>
+</config>

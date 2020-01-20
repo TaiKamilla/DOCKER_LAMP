@@ -1,0 +1,30 @@
+{% block sw_promotion_rule_select %}
+    <div class="sw-promotion-rule-select">
+        {% block a  %}
+            <sw-entity-many-to-many-select
+                ref="ruleSelect"
+                class="sw-promotion-rule-select"
+                v-bind="$attrs"
+                :entityCollection="collection"
+                @change="onChange"
+                v-on="$listeners">
+
+                <template #before-item-list>
+                    <li class="sw-select-result sw-promotion-rule-select__add-new-rule"
+                        @click="showRuleModal = true">
+                        {{ $tc('sw-promotion.swPromotionRuleSelect.labelAddNewRule') }}
+                    </li>
+                </template>
+            </sw-entity-many-to-many-select>
+        {% endblock %}
+
+        {% block b %}
+            <sw-rule-modal
+                v-if="showRuleModal"
+                @save="onSaveRule"
+                @modal-close="showRuleModal = false"
+                :allowedRuleScopes="ruleScope">
+            </sw-rule-modal>
+        {% endblock%}
+    </div>
+{% endblock %}
