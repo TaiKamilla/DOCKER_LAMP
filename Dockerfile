@@ -11,17 +11,20 @@ RUN curl -sS https://getcomposer.org/installer | php \
 ## install libraries
 RUN requirements="vim sudo mlocate git-core curl build-essential openssl libssl-dev nodejs mysql-client git cron libpng-dev libmcrypt-dev libmcrypt4 libcurl3-dev libfreetype6 libjpeg62-turbo libjpeg62-turbo-dev libfreetype6-dev libicu-dev libxslt1-dev libzip-dev zip" \
  && apt-get update \
- && apt-get install -y $requirements \
- && rm -rf /var/lib/apt/lists/* \
+ && apt-get install -y $requirements
+ 
+RUN rm -rf /var/lib/apt/lists/* \
  && apt-get update -yq \
  && apt-get install curl gnupg -yq \
- && curl -sL https://deb.nodesource.com/setup_10.x | bash \
- && apt-get install nodejs -yq \
- && docker-php-ext-install pdo_mysql \
+ && curl -sL https://deb.nodesource.com/setup_14.x | bash \
+ && apt-get install nodejs -yq
+ 
+RUN docker-php-ext-install pdo_mysql \
  && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
  && docker-php-ext-install gd \
- && yes '' | pecl install mcrypt-1.0.2 \
- && docker-php-ext-enable mcrypt \
+ && yes '' | pecl install mcrypt-1.0.2
+ 
+RUN docker-php-ext-enable mcrypt \
  && docker-php-ext-install mbstring \ 
  && docker-php-ext-install zip \
  && docker-php-ext-install intl \
