@@ -15,9 +15,13 @@ RUN requirements="vim sudo mlocate git-core curl build-essential openssl libssl-
  
 RUN rm -rf /var/lib/apt/lists/* \
  && apt-get update -yq \
- && apt-get install curl gnupg -yq \
- && curl -sL https://deb.nodesource.com/setup_14.x | bash \
- && apt-get install nodejs -yq
+ && apt-get install curl gnupg -yq 
+ 
+#  RUN rm -rf /var/lib/apt/lists/* \
+#  && apt-get update -yq \
+#  && apt-get install curl gnupg -yq \
+#  && curl -sL https://deb.nodesource.com/setup_14.x | bash \
+#  && apt-get install nodejs -yq
  
 RUN docker-php-ext-install pdo_mysql \
  && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
